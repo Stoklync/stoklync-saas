@@ -9,10 +9,10 @@ export async function GET(req: NextRequest) {
   if (!url || !key) return NextResponse.json({ error: 'Missing env' }, { status: 500 });
   const supabase = createClient(url, key);
   const [brandRes, cmsRes] = await Promise.all([
-    supabase.from('branding').select('company_name, logo_url, primary_color, info_email, support_email, sales_email, phone, whatsapp, address').eq('org_id', orgId).maybeSingle(),
+    supabase.from('branding').select('*').eq('org_id', orgId).maybeSingle(),
     supabase.from('website_cms').select('*').eq('org_id', orgId).maybeSingle(),
   ]);
-  const branding = brandRes.data;
+  const branding = brandRes.data as Record<string, string> | null;
   const cms = cmsRes.data;
   const companyName = branding?.company_name || 'Your Company';
   return NextResponse.json({
@@ -20,12 +20,17 @@ export async function GET(req: NextRequest) {
       companyName: branding.company_name || companyName,
       logoUrl: branding.logo_url || '',
       primaryColor: branding.primary_color || '#163A63',
-      infoEmail: (branding as { info_email?: string }).info_email || '',
-      supportEmail: (branding as { support_email?: string }).support_email || '',
-      salesEmail: (branding as { sales_email?: string }).sales_email || '',
+      infoEmail: branding.info_email || '',
+      supportEmail: branding.support_email || '',
+      salesEmail: branding.sales_email || '',
       phone: branding.phone || '',
       whatsapp: branding.whatsapp || '',
       address: branding.address || '',
+      instagramUrl: branding.instagram_url || '',
+      facebookUrl: branding.facebook_url || '',
+      businessType: branding.business_type || 'product',
+      facebookPixelId: branding.facebook_pixel_id || '',
+      gaId: branding.ga_id || '',
     } : null,
     cms: cms ? {
       heroTitle: cms.hero_title || `Grow ${companyName} online`,
@@ -39,5 +44,6 @@ export async function GET(req: NextRequest) {
       stockQuoteTitle: cms.stock_quote_title || 'Get in touch',
       stockQuoteSubtitle: cms.stock_quote_subtitle || "Leave your details and we'll reach out.",
     } : null,
+    customHtml: (cms as Record<string, unknown>)?.custom_html as string | null || null,
   });
 }

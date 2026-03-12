@@ -11,49 +11,117 @@ import VisualBuilder from './VisualBuilder';
 import {
   LayoutDashboard, LogOut, Loader2, Globe, Users, Megaphone, LifeBuoy,
   Settings, UserPlus, CreditCard, ExternalLink, Mail, Phone, Plus, Trash2, MessageCircle, X,
-  Sparkles, ShoppingBag, Clock, PenTool, Layout, Send, Shield, ArrowRight,
+  Sparkles, ShoppingBag, Clock, PenTool, Layout, Send, Shield, ArrowRight, ImagePlus,
 } from 'lucide-react';
 
 const WEBSITE_TEMPLATES = {
   product: {
-    hero_title: 'Products That Deliver',
-    hero_subtitle: 'Quality products. Fast delivery. Trusted by businesses.',
-    value_line: 'Shop smarter.',
-    process_title: 'How it works',
-    process_subtitle: 'Browse, order, receive. We handle logistics so you focus on growth.',
-    about_title: 'About us',
-    about_body1: 'We supply quality products with reliable delivery. Our catalog serves businesses of all sizes.',
-    about_body2: '',
+    emoji: '📦', label: 'Products & Wholesale', color: '#2F8F5B',
+    hero_title: 'Quality Products, Wholesale Prices',
+    hero_subtitle: 'Trusted B2B supplier with competitive pricing, reliable stock and fast delivery across the region.',
+    value_line: 'Quality supply, every time.',
+    process_title: 'Why businesses choose us',
+    process_subtitle: 'We combine competitive pricing, consistent stock and fast delivery to make B2B purchasing effortless.',
+    about_title: 'About our business',
+    about_body1: 'We are a leading wholesale supplier delivering quality products to businesses of all sizes. Our streamlined supply chain and dedicated account management make procurement simple.',
+    about_body2: 'From small retailers to large distributors. We have the stock, the prices, and the service you need to stay competitive.',
     stock_quote_title: 'Request a quote',
-    stock_quote_subtitle: 'Tell us what you need. We reply within 24 hours.',
+    stock_quote_subtitle: 'Tell us what you need. We reply within 24 hours with pricing and availability.',
   },
   service: {
-    hero_title: 'Services That Scale',
-    hero_subtitle: 'Expert support when you need it.',
-    value_line: 'Your success is our priority.',
+    emoji: '🔧', label: 'Services & Trades', color: '#0891B2',
+    hero_title: 'Expert Services That Deliver Results',
+    hero_subtitle: 'Professional, reliable service with a focus on quality workmanship and your complete satisfaction.',
+    value_line: 'Results you can count on.',
     process_title: 'Our services',
-    process_subtitle: 'From setup to ongoing support, we guide you through every step.',
+    process_subtitle: 'From initial consultation to project completion, we handle every detail with care and expertise.',
     about_title: 'About us',
-    about_body1: 'We deliver professional services with clear deliverables and transparent pricing.',
-    about_body2: '',
-    stock_quote_title: 'Get started',
-    stock_quote_subtitle: 'Describe your needs. We will be in touch with a tailored proposal.',
+    about_body1: 'We are a professional services business committed to delivering exceptional results. Our experienced team brings skill, dedication, and integrity to every job.',
+    about_body2: 'We take pride in our reputation for quality work and customer satisfaction. Your project is our priority.',
+    stock_quote_title: 'Get a free quote',
+    stock_quote_subtitle: 'Describe what you need and we will get back to you with a detailed proposal.',
   },
   consulting: {
-    hero_title: 'Strategic Consulting',
-    hero_subtitle: 'High-ticket advice for serious growth.',
-    value_line: 'Think bigger.',
+    emoji: '💼', label: 'Consulting & Coaching', color: '#7C3AED',
+    hero_title: 'Strategic Advice That Drives Growth',
+    hero_subtitle: 'Expert consulting to help you make smarter decisions, move faster and achieve measurable results.',
+    value_line: 'Think bigger. Move faster.',
     process_title: 'Our approach',
-    process_subtitle: 'Discovery, strategy, execution. We partner with you to achieve measurable outcomes.',
-    about_title: 'About us',
-    about_body1: 'We help leaders make better decisions. Our consultants bring deep expertise across strategy, operations, and growth.',
-    about_body2: '',
-    stock_quote_title: 'Book a call',
-    stock_quote_subtitle: 'Let us understand your challenge. We will propose a clear path forward.',
+    process_subtitle: 'Discovery, strategy, execution. We partner with you at every stage to turn challenges into opportunities.',
+    about_title: 'About our firm',
+    about_body1: 'We help business leaders make better decisions with confidence. Our consultants bring deep expertise across strategy, operations, marketing, and growth.',
+    about_body2: 'We have helped companies across multiple industries unlock their potential and achieve sustainable growth.',
+    stock_quote_title: 'Book a strategy call',
+    stock_quote_subtitle: "Let's discuss your challenge. 30 minutes could change the direction of your business.",
+  },
+  tech: {
+    emoji: '💻', label: 'Tech & Software', color: '#4F46E5',
+    hero_title: 'Software That Scales With You',
+    hero_subtitle: 'Streamline operations, automate workflows, and grow your business with tools built for modern teams.',
+    value_line: 'Smarter tools. Better results.',
+    process_title: 'What we build',
+    process_subtitle: 'We design and develop software solutions that solve real problems and create measurable value for your business.',
+    about_title: 'Who we are',
+    about_body1: 'We are a software development studio specialising in building high-quality digital products. Our team combines technical expertise with business understanding to deliver solutions that work.',
+    about_body2: 'From MVPs to enterprise platforms. We are with you from idea to launch and beyond.',
+    stock_quote_title: 'Start a project',
+    stock_quote_subtitle: "Tell us about your idea or challenge. We'll come back with a clear plan and honest quote.",
+  },
+  food: {
+    emoji: '🍽️', label: 'Food & Beverage', color: '#D97706',
+    hero_title: 'Fresh Quality, Every Order',
+    hero_subtitle: 'Premium ingredients and reliable supply for food businesses that care about quality and consistency.',
+    value_line: 'Fresh. Reliable. Delivered.',
+    process_title: 'Why chefs love us',
+    process_subtitle: 'Consistent quality, flexible ordering, and next-day delivery. Everything a food business needs to operate smoothly.',
+    about_title: 'Our story',
+    about_body1: 'We are passionate about food quality and understand the demands of running a food business. Our mission is to make sourcing premium ingredients as easy as possible.',
+    about_body2: 'From independent restaurants to large catering operations. We deliver the quality and reliability you need.',
+    stock_quote_title: 'Place a bulk order',
+    stock_quote_subtitle: 'Tell us what you need and how often. We will set up a supply arrangement that works for you.',
+  },
+  agency: {
+    emoji: '🚀', label: 'Agency & Creative', color: '#BE185D',
+    hero_title: 'Creative Work That Gets Results',
+    hero_subtitle: 'We build brands, campaigns, and digital experiences that capture attention and drive real business growth.',
+    value_line: 'Bold ideas. Real results.',
+    process_title: 'What we do',
+    process_subtitle: 'Strategy, design, execution. We handle your marketing and brand so you can focus on running your business.',
+    about_title: 'About the agency',
+    about_body1: 'We are a full-service creative agency helping businesses stand out in crowded markets. Our team of strategists, designers, and marketers work together to deliver campaigns that perform.',
+    about_body2: 'We believe great creative work should be measurable. Every project is backed by strategy and tracked for results.',
+    stock_quote_title: 'Start a project',
+    stock_quote_subtitle: 'Tell us about your brand and goals. We will come back with a tailored proposal.',
+  },
+  health: {
+    emoji: '🏥', label: 'Health & Wellness', color: '#16A34A',
+    hero_title: 'Your Health, Our Priority',
+    hero_subtitle: 'Compassionate, professional health and wellness services designed around you and your wellbeing.',
+    value_line: 'Feel better. Live better.',
+    process_title: 'Our services',
+    process_subtitle: 'We offer a comprehensive range of health and wellness services in a welcoming, professional environment.',
+    about_title: 'About our practice',
+    about_body1: 'We are a dedicated team of health professionals committed to delivering exceptional care. Our approach is holistic, evidence-based, and centred on your individual needs.',
+    about_body2: 'Whether you are looking to improve your health, manage a condition, or reach your wellness goals. We are here to support you every step of the way.',
+    stock_quote_title: 'Book an appointment',
+    stock_quote_subtitle: 'Fill out the form and we will confirm your appointment within 24 hours.',
+  },
+  real_estate: {
+    emoji: '🏠', label: 'Real Estate & Property', color: '#163A63',
+    hero_title: 'Find Your Perfect Property',
+    hero_subtitle: 'Expert real estate services with local knowledge, professional guidance, and a commitment to your success.',
+    value_line: 'Your property goals, our expertise.',
+    process_title: 'How we help',
+    process_subtitle: 'From your first enquiry to the final signature. We guide you through every step of the property journey.',
+    about_title: 'About our team',
+    about_body1: 'We are experienced real estate professionals with deep local knowledge and a genuine commitment to helping our clients succeed. Whether buying, selling, or renting. We deliver results.',
+    about_body2: 'Our reputation is built on honest advice, expert guidance, and exceptional service. Let us help you find the right property.',
+    stock_quote_title: 'Get in touch',
+    stock_quote_subtitle: "Tell us what you're looking for and we'll match you with the right property or buyer.",
   },
 };
 
-type Tab = 'home' | 'website' | 'crm' | 'marketing' | 'support' | 'team' | 'settings' | 'billing';
+type Tab = 'home' | 'website' | 'crm' | 'marketing' | 'support' | 'team' | 'settings' | 'billing' | 'account';
 type WebsiteSubTab = 'preview' | 'branding' | 'contact' | 'cms' | 'visual';
 type CrmSubTab = 'pipeline' | 'contacts';
 type CrmViewType = 'consulting' | 'deals' | 'product' | 'services';
@@ -110,12 +178,21 @@ interface Ticket {
 
 function SalesChart({ weeklyData }: { weeklyData: number[] }) {
   const chartRef = useRef<HTMLCanvasElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const chartInstanceRef = useRef<any>(null);
   const data = weeklyData.length >= 7 ? weeklyData : [0, 0, 0, 0, 0, 0, 0];
   useEffect(() => {
-    let chart: { destroy: () => void } | null = null;
+    // Destroy any existing instance first to avoid "Canvas already in use" error
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.destroy();
+      chartInstanceRef.current = null;
+    }
     import('chart.js/auto').then((Chart) => {
       if (!chartRef.current) return;
-      chart = new Chart.default(chartRef.current, {
+      // Also destroy any orphaned chart attached to this canvas element
+      const existing = (Chart.default as unknown as { getChart?: (canvas: HTMLCanvasElement) => { destroy(): void } | undefined }).getChart?.(chartRef.current);
+      if (existing) existing.destroy();
+      chartInstanceRef.current = new Chart.default(chartRef.current, {
         type: 'line',
         data: {
           labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
@@ -140,7 +217,10 @@ function SalesChart({ weeklyData }: { weeklyData: number[] }) {
         },
       });
     });
-    return () => { chart?.destroy(); };
+    return () => {
+      chartInstanceRef.current?.destroy();
+      chartInstanceRef.current = null;
+    };
   }, [data.join(',')]);
   return (
     <div className="h-[80px] w-full">
@@ -235,7 +315,7 @@ function computeNextBestAction(leads: Lead[]): { message: string; cta: string; t
   return null;
 }
 
-function BentoHome({ userName, orgName, leadCount, topLeads, leads, serviceHours, productRevenue, weeklyRevenue, onNavigate }: {
+function BentoHome({ userName, orgName, leadCount, topLeads, leads, serviceHours, productRevenue, weeklyRevenue, onNavigate, aiInsightsOpen, onAiInsightsOpen, onAiInsightsClose, orgId }: {
   userName: string;
   orgName: string;
   leadCount: number;
@@ -245,193 +325,162 @@ function BentoHome({ userName, orgName, leadCount, topLeads, leads, serviceHours
   productRevenue: number;
   weeklyRevenue: number[];
   onNavigate: (tab: Tab) => void;
+  aiInsightsOpen?: boolean;
+  onAiInsightsOpen?: () => void;
+  onAiInsightsClose?: () => void;
+  orgId?: string;
 }) {
   const nudge = computeNextBestAction(leads);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const bentoRef = useRef<HTMLDivElement>(null);
-
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
-    tl.to(headerRef.current, { opacity: 1, y: 0, duration: 1.2 });
-    tl.from('.bento-item', { opacity: 0, y: 30, duration: 0.8, stagger: 0.1 }, '-=0.8');
-    tl.to(sidebarRef.current, { opacity: 1, x: 0, duration: 1 }, '-=0.5');
-    return () => { tl.kill(); };
-  }, []);
-
-  const initials = userName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'U';
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const firstName = userName.split(' ')[0] || 'there';
+  const newToday = leads.filter(l => { try { return new Date(l.created_at).toDateString() === new Date().toDateString(); } catch { return false; } }).length;
+  const wonCount = leads.filter(l => (l.stage || '').toUpperCase() === 'WON').length;
+  const sourceCounts = leads.reduce((acc, l) => { const s = (l.source || 'WEBSITE').toUpperCase(); acc[s] = (acc[s] || 0) + 1; return acc; }, {} as Record<string, number>);
+  const siteUrl = typeof window !== 'undefined' && orgId ? `${window.location.origin}/site/${orgId}` : orgId ? `/site/${orgId}` : '';
+  const stageColors: Record<string, string> = { NEW: 'bg-blue-100 text-blue-700', QUALIFIED: 'bg-indigo-100 text-indigo-700', PROPOSAL: 'bg-purple-100 text-purple-700', WON: 'bg-emerald-100 text-emerald-700', LOST: 'bg-red-100 text-red-600', DISCOVERY: 'bg-cyan-100 text-cyan-700', NEGOTIATION: 'bg-amber-100 text-amber-700', CONTRACT_SIGNED: 'bg-teal-100 text-teal-700' };
+  const srcEmoji: Record<string, string> = { WEBSITE: '🌐', FACEBOOK_AD: '📘', GOOGLE_AD: '🔍', INSTAGRAM: '📸', MANUAL: '✍️', REFERRAL: '🤝' };
 
   return (
-    <div className="relative min-h-[calc(100vh-8rem)] bg-[#050505] text-white -m-6 p-6 md:p-12 lg:pr-[420px] rounded-2xl overflow-hidden">
-      <div className="aurora-bg pointer-events-none">
-        <div className="aurora-blob aurora-blob-1" />
-        <div className="aurora-blob aurora-blob-2" />
-        <div className="aurora-blob aurora-blob-3" />
+    <div className="space-y-6">
+      {/* Greeting */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">{greeting}, {firstName}! 👋</h1>
+          <p className="text-slate-500 text-sm mt-0.5">{orgName}. Here&apos;s your business overview</p>
+        </div>
+        <p className="text-xs text-slate-400 hidden sm:block">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
       </div>
-      <main className="max-w-6xl mx-auto relative z-10">
-        <header ref={headerRef} className="mb-8 opacity-0 translate-y-4" id="bento-header">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight mb-1">Command Center</h1>
-              <p className="text-zinc-400 text-sm">Overview of your pipeline, revenue, and next actions.</p>
-            </div>
-            <p className="text-zinc-500 text-sm mt-2 md:mt-0">{leadCount} leads</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-400 bg-white/5 rounded-xl px-4 py-3 border border-white/5">
-            <span className="font-medium text-zinc-300">Workflow</span>
-            <Globe size={14} className="text-indigo-400" />
-            <span>Website</span>
-            <ArrowRight size={12} />
-            <span>Leads</span>
-            <ArrowRight size={12} />
-            <span>CRM</span>
-            <ArrowRight size={12} />
-            <span className="text-emerald-400">Launch</span>
-          </div>
-          <div className="flex items-center gap-4 mt-6 md:mt-0">
-            <button className="glass-card px-6 py-3 font-semibold text-sm hover:text-white flex items-center gap-2">
-              <Sparkles size={18} /> AI Insights
-            </button>
-            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center border-2 border-white/20">
-              <span className="font-bold text-sm">{initials}</span>
-            </div>
-          </div>
-        </header>
-        <div ref={bentoRef} className="bento-grid">
-          <div className="glass-card col-span-1 md:col-span-2 row-span-2 p-8 flex flex-col justify-between bento-item min-h-[360px]">
-            <div>
-              <div className="flex justify-between items-start mb-6">
-                <div className="p-3 bg-indigo-500/20 rounded-xl w-fit">
-                  <Users className="text-indigo-400" size={24} />
-                </div>
-                <span className="text-xs font-bold uppercase tracking-widest text-zinc-500">Consultancy Pillar</span>
-              </div>
-              <h2 className="text-2xl font-bold mb-2">Lead Pipeline</h2>
-              <p className="text-zinc-400 text-sm mb-8">Current high-ticket consulting opportunities.</p>
-              <div className="space-y-4">
-                {topLeads.length > 0 ? topLeads.map((l) => (
-                  <div key={l.id} className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-indigo-500/30 flex items-center justify-center text-indigo-300 font-bold text-sm">{l.name[0]}</div>
-                      <div>
-                        <p className="font-semibold text-sm">{l.company || l.name}</p>
-                        <p className="text-xs text-zinc-500">{l.stage || 'NEW'}</p>
-                      </div>
-                    </div>
-                  </div>
-                )) : (
-                  <p className="text-zinc-500 text-sm">No leads yet. Add leads or get them from your website.</p>
-                )}
-              </div>
-            </div>
-            <button onClick={() => onNavigate('crm')} className="w-full py-3 bg-white text-black font-bold rounded-xl mt-6 hover:bg-zinc-200 transition-colors">
-              View All Leads
-            </button>
-          </div>
-          <button onClick={() => onNavigate('crm')} className="glass-card col-span-1 md:col-span-2 p-8 flex flex-col bento-item text-left overflow-hidden">
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <p className="text-xs font-bold text-zinc-500 uppercase">Product Performance</p>
-                <h3 className="text-xl font-bold">${productRevenue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</h3>
-              </div>
-              <div className="text-right">
-                <p className="text-zinc-500 text-[10px]">Orders revenue</p>
-              </div>
-            </div>
-            <div className="flex-grow min-h-[80px]">
-              <SalesChart weeklyData={weeklyRevenue} />
-            </div>
-          </button>
-          <div className="glass-card col-span-1 p-8 flex flex-col justify-between bento-item">
-            <div className="p-3 bg-purple-500/20 rounded-xl w-fit mb-4">
-              <Clock className="text-purple-400" size={24} />
-            </div>
-            <div>
-              <p className="text-xs font-bold text-zinc-500 mb-1 uppercase">Service Bank</p>
-              <h3 className="text-3xl font-bold tracking-tight">{serviceHours}h</h3>
-            </div>
-          </div>
-          <button onClick={() => onNavigate('website')} className="glass-card col-span-1 md:col-span-2 p-8 relative overflow-hidden group bento-item text-left">
-            <div className="relative z-10">
-              <div className="p-3 bg-amber-500/20 rounded-xl w-fit mb-4">
-                <Layout className="text-amber-400" size={24} />
-              </div>
-              <h2 className="text-xl font-bold mb-2">Visual AI Builder</h2>
-              <p className="text-zinc-400 text-sm max-w-[200px]">Generate immersive sites instantly.</p>
-            </div>
-            <div className="absolute right-[-10%] bottom-[-10%] w-1/2 h-1/2 bg-gradient-to-tl from-amber-500/20 to-transparent rounded-full opacity-50 group-hover:opacity-70 transition-opacity" />
-          </button>
-          <button
-            onClick={() => nudge && onNavigate(nudge.tab)}
-            className={`glass-card col-span-1 p-8 flex flex-col justify-center items-center text-center bento-item ${nudge ? 'ring-2 ring-indigo-500/50 hover:ring-indigo-400' : ''}`}
-          >
-            {nudge ? (
-              <>
-                <div className="p-3 bg-indigo-500/20 rounded-xl w-fit mb-4">
-                  <Sparkles className="text-indigo-400" size={24} />
-                </div>
-                <p className="text-sm font-semibold text-zinc-300 mb-2">Next best action</p>
-                <p className="text-xs text-zinc-500 mb-4">{nudge.message}</p>
-                <span className="text-indigo-400 text-xs font-bold">{nudge.cta} →</span>
-              </>
-            ) : (
-              <>
-                <div className="relative mb-4">
-                  <svg className="w-20 h-20">
-                    <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-white/10" />
-                    <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-indigo-500" strokeDasharray="226" strokeDashoffset={leadCount > 0 ? 45 : 158} strokeLinecap="round" />
-                  </svg>
-                  <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold">{leadCount > 0 ? 80 : 30}%</span>
-                </div>
-                <p className="text-sm font-semibold text-zinc-400">{leadCount > 0 ? 'Pipeline active' : 'Add leads to start'}</p>
-              </>
-            )}
-          </button>
-          <button onClick={() => onNavigate('marketing')} className="glass-card col-span-1 p-8 flex flex-col justify-between bento-item text-left">
-            <div className="p-3 bg-rose-500/20 rounded-xl w-fit mb-4">
-              <PenTool className="text-rose-400" size={24} />
-            </div>
-            <h3 className="font-bold">Draft Copy</h3>
-            <p className="text-xs text-zinc-500">AI ready for product descriptions.</p>
-          </button>
-        </div>
-      </main>
-      <aside ref={sidebarRef} className="fixed top-6 right-6 bottom-6 w-[380px] z-50 flex flex-col p-6 glass-card opacity-0 translate-x-8" id="aiSidebar">
-        <div className="flex items-center justify-between mb-6">
+
+      {/* Live site banner */}
+      {orgId && (
+        <div className="rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border border-slate-200 bg-white">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-white" size={16} />
+            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shrink-0" />
+            <div>
+              <p className="font-semibold text-sm text-slate-900">Your website is live</p>
+              <p className="text-xs text-slate-400 font-mono truncate max-w-[260px]">{siteUrl}</p>
             </div>
-            <h2 className="font-bold">AI Agent</h2>
           </div>
-          <span className="text-[10px] bg-white/10 px-2 py-1 rounded-full text-zinc-400 font-bold uppercase tracking-wider">Context: CRM</span>
-        </div>
-        <div className="flex-1 overflow-y-auto space-y-4 mb-6 pr-2 min-h-0">
-          <div className="bg-white/5 p-4 rounded-2xl rounded-tl-none border border-white/5">
-            <p className="text-sm text-zinc-300 leading-relaxed">
-              {leadCount === 0
-                ? "Hello! I've analyzed your pipeline. Add leads from your website, Facebook ads, or manually to get started."
-                : leadCount < 5
-                  ? `Hello! I've analyzed your pipeline. You have ${leadCount} lead${leadCount === 1 ? '' : 's'}. I can help prioritize follow-ups and draft proposals.`
-                  : `Hello! I've analyzed your <strong>Consultancy Pipeline</strong>. You have ${leadCount} leads. Several are nearing the closing stage—should I draft follow-up proposals?`}
-            </p>
-          </div>
-          <div className="bg-indigo-500/20 p-4 rounded-2xl rounded-tr-none border border-indigo-500/20 ml-12">
-            <p className="text-sm text-indigo-100">Yes, prioritize TechNova Solutions first.</p>
-          </div>
-          <div className="bg-white/5 p-4 rounded-2xl rounded-tl-none border border-white/5">
-            <p className="text-sm text-zinc-300 leading-relaxed">
-              Understood. I&apos;ve drafted a proposal focusing on the strategy deliverables for <strong>TechNova</strong>. It&apos;s ready in your drafts.
-            </p>
+          <div className="flex items-center gap-2 shrink-0">
+            <button onClick={() => { if (typeof navigator !== 'undefined') navigator.clipboard?.writeText(siteUrl); }} className="text-slate-600 hover:text-slate-900 border border-slate-200 hover:bg-slate-50 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">Copy link</button>
+            <a href={`/site/${orgId}`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold px-3 py-1.5 rounded-lg text-white transition-colors" style={{ background: '#163A63' }}>Preview →</a>
           </div>
         </div>
-        <div className="relative">
-          <input type="text" placeholder="Ask AI about your business..." className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm focus:outline-none focus:border-indigo-500 transition-colors pr-12 text-white placeholder-zinc-500" />
-          <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white">
-            <Send className="w-4 h-4" size={16} />
+      )}
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { label: 'Total Leads', value: leadCount, delta: newToday > 0 ? `+${newToday} today` : null },
+          { label: 'New Today', value: newToday, delta: null },
+          { label: 'Won Deals', value: wonCount, delta: leadCount > 0 ? `${Math.round((wonCount / leadCount) * 100)}% win rate` : null },
+          { label: 'Revenue', value: `$${productRevenue.toLocaleString()}`, delta: null },
+        ].map((s, i) => (
+          <button key={s.label} onClick={() => onNavigate('crm')}
+            className="bg-white rounded-xl p-5 border border-slate-200 hover:border-slate-300 hover:shadow-sm transition-all text-left group">
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">{s.label}</p>
+            <p className="text-2xl font-bold text-slate-900 group-hover:text-slate-700 transition-colors">{s.value}</p>
+            {s.delta && <p className="text-[11px] text-emerald-600 font-semibold mt-1">{s.delta}</p>}
           </button>
+        ))}
+      </div>
+
+      {/* Main content grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {/* Recent leads */}
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-slate-900 text-sm">Recent Leads</h3>
+            <button onClick={() => onNavigate('crm')} className="text-xs text-slate-500 font-semibold hover:text-slate-900 flex items-center gap-1 transition-colors">View pipeline <ArrowRight size={11} /></button>
+          </div>
+          {leads.length === 0 ? (
+            <div className="text-center py-10">
+              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
+                <ArrowRight size={20} className="text-slate-400" />
+              </div>
+              <p className="text-sm font-semibold text-slate-700">No leads yet</p>
+              <p className="text-xs text-slate-400 mt-1 max-w-[220px] mx-auto">Share your website link and leads will appear here automatically</p>
+              <button onClick={() => onNavigate('website')} className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 text-white text-xs font-semibold rounded-xl transition-colors" style={{ background: '#163A63' }}>Set up website →</button>
+            </div>
+          ) : (
+            <div className="space-y-1">
+              {leads.slice(0, 6).map(l => (
+                <div key={l.id} onClick={() => onNavigate('crm')} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer group">
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ background: '#163A63' }}>
+                    {(l.name[0] || '?').toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-slate-800 truncate">{l.name}</p>
+                    <p className="text-xs text-slate-400 truncate">{l.company || l.email}</p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span title={l.source || 'WEBSITE'}>{srcEmoji[(l.source || 'WEBSITE').toUpperCase()] || '🌐'}</span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${stageColors[(l.stage || 'NEW').toUpperCase()] || 'bg-slate-100 text-slate-600'}`}>{l.stage || 'NEW'}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </aside>
+
+        {/* Right panel */}
+        <div className="space-y-4">
+          {nudge ? (
+            <button onClick={() => onNavigate(nudge.tab)} className="w-full text-white rounded-xl p-5 text-left hover:opacity-90 transition-opacity shadow-md" style={{ background: '#163A63' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-2">Action needed</p>
+              <p className="font-semibold text-sm leading-snug">{nudge.message}</p>
+              <p className="text-xs mt-3 opacity-60 flex items-center gap-1">{nudge.cta} <ArrowRight size={10} /></p>
+            </button>
+          ) : (
+            <div className="bg-white border border-slate-200 rounded-xl p-5">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Status</p>
+              <div className="flex items-center gap-2 mb-1">
+                <div className={`w-2 h-2 rounded-full ${leadCount > 0 ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                <p className="font-semibold text-sm text-slate-900">{leadCount > 0 ? 'Pipeline active' : 'Ready to launch'}</p>
+              </div>
+              <p className="text-xs text-slate-400">{leadCount > 0 ? `${leadCount} leads in pipeline` : 'Share your site to get your first lead'}</p>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { label: 'Add Lead', tab: 'crm' as Tab },
+              { label: 'Email Leads', tab: 'marketing' as Tab },
+              { label: 'Edit Site', tab: 'website' as Tab },
+              { label: 'Settings', tab: 'settings' as Tab },
+            ].map(a => (
+              <button key={a.label} onClick={() => onNavigate(a.tab)}
+                className="bg-white border border-slate-200 rounded-xl p-3 text-left hover:bg-slate-50 hover:border-slate-300 transition-all">
+                <p className="text-xs font-semibold text-slate-700">{a.label}</p>
+              </button>
+            ))}
+          </div>
+
+          {leads.length > 0 && (
+            <div className="bg-white border border-slate-200 rounded-xl p-4">
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Lead Sources</p>
+              <div className="space-y-2.5">
+                {Object.entries(sourceCounts).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([src, count]) => (
+                  <div key={src} className="flex items-center gap-2">
+                    <span className="text-sm w-4 text-center">{srcEmoji[src] || '📌'}</span>
+                    <div className="flex-1 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div className="h-1.5 rounded-full" style={{ width: `${Math.round((count / leads.length) * 100)}%`, background: '#163A63' }} />
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-medium w-16 text-right">{count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="bg-white border border-slate-200 rounded-xl p-4">
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Revenue (7 days)</p>
+            <p className="text-2xl font-bold text-slate-900">${productRevenue.toLocaleString()}</p>
+            <div className="mt-3 h-[52px]"><SalesChart weeklyData={weeklyRevenue} /></div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -456,6 +505,7 @@ export default function DashboardPage() {
     company_name: '', logo_url: '', primary_color: '#163A63', phone: '', whatsapp: '', address: '',
     info_email: '', support_email: '', sales_email: '', contact_email: '',
     instagram_url: '', facebook_url: '', business_type: 'product' as 'product' | 'service',
+    facebook_pixel_id: '', ga_id: '', auto_welcome_email: false,
   });
   const [websiteCms, setWebsiteCms] = useState({
     hero_title: '', hero_subtitle: '', value_line: '', process_title: '', process_subtitle: '',
@@ -471,17 +521,29 @@ export default function DashboardPage() {
   const [leadNote, setLeadNote] = useState('');
   const [marketingCompose, setMarketingCompose] = useState({ subject: '', body: '', recipientIds: [] as string[] });
   const [marketingSending, setMarketingSending] = useState(false);
+  const [marketingSentCount, setMarketingSentCount] = useState(0);
+  const [logoUploading, setLogoUploading] = useState(false);
   const [crmSubTab, setCrmSubTab] = useState<CrmSubTab>('pipeline');
   const [crmViewType, setCrmViewType] = useState<CrmViewType>('deals');
   const [crmSearch, setCrmSearch] = useState('');
   const [crmSourceFilter, setCrmSourceFilter] = useState<string>('ALL');
   const [supportNewTicketOpen, setSupportNewTicketOpen] = useState(false);
+  const [addProjectModal, setAddProjectModal] = useState(false);
+  const [addProjectForm, setAddProjectForm] = useState({ name: '', credits: 0 });
   const [expandedTicketId, setExpandedTicketId] = useState<string | null>(null);
   const [newLeadsDot, setNewLeadsDot] = useState(false);
   const [websitePreviewKey, setWebsitePreviewKey] = useState(0);
   const [aiGenerateLoading, setAiGenerateLoading] = useState(false);
+  const [showAiInsightsModal, setShowAiInsightsModal] = useState(false);
   const [serviceProjects, setServiceProjects] = useState<{ id: string; name: string; status: string; credits_total: number; lead_id?: string }[]>([]);
   const [orders, setOrders] = useState<{ id: string; total: number; status: string; created_at: string }[]>([]);
+  const [currentPlan, setCurrentPlan] = useState<'free_trial' | 'starter' | 'business' | 'pro'>('free_trial');
+  const [trialDaysLeft, setTrialDaysLeft] = useState(14);
+  const [profileForm, setProfileForm] = useState({ name: '', email: '' });
+  const [profileSaved, setProfileSaved] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [dangerZoneConfirm, setDangerZoneConfirm] = useState('');
+  const [showDangerZone, setShowDangerZone] = useState(false);
 
   useEffect(() => {
     const client = supabase;
@@ -496,6 +558,7 @@ export default function DashboardPage() {
         return;
       }
       setUser(session.user);
+      setProfileForm({ name: session.user.user_metadata?.name || '', email: session.user.email || '' });
 
       const { data: tm } = await client.from('team_members').select('org_id').eq('user_id', session.user.id).limit(1).maybeSingle();
       if (!tm) {
@@ -586,6 +649,9 @@ export default function DashboardPage() {
           instagram_url: String(rb.instagram_url || ''),
           facebook_url: String(rb.facebook_url || ''),
           business_type: (rb.business_type === 'service' ? 'service' : 'product') as 'product' | 'service',
+          facebook_pixel_id: String(rb.facebook_pixel_id || ''),
+          ga_id: String(rb.ga_id || ''),
+          auto_welcome_email: Boolean(rb.auto_welcome_email || false),
         });
       }
       const projects = Array.isArray(projectsSettled) ? projectsSettled : [];
@@ -666,12 +732,37 @@ export default function DashboardPage() {
         sales_email: branding.sales_email || null, contact_email: branding.contact_email || null,
         instagram_url: branding.instagram_url || null, facebook_url: branding.facebook_url || null,
         business_type: branding.business_type || 'product', updated_at: new Date().toISOString(),
+        facebook_pixel_id: branding.facebook_pixel_id || null, ga_id: branding.ga_id || null,
+        auto_welcome_email: branding.auto_welcome_email || false,
       }, { onConflict: 'org_id' });
       setSettingsSaved(true);
       setWebsitePreviewKey(k => k + 1);
       setTimeout(() => setSettingsSaved(false), 2000);
     } catch (e) {
       console.warn('Save branding failed:', e);
+    }
+  };
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !org || !supabase) return;
+    setLogoUploading(true);
+    try {
+      const ext = file.name.split('.').pop() || 'png';
+      const path = `${org.id}/logo-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from('site-images').upload(path, file, { upsert: true });
+      if (upErr) throw upErr;
+      const { data: urlData } = supabase.storage.from('site-images').getPublicUrl(path);
+      const logoUrl = urlData.publicUrl;
+      setBranding(b => ({ ...b, logo_url: logoUrl }));
+      // Save immediately
+      await supabase.from('branding').upsert({ org_id: org.id, logo_url: logoUrl }, { onConflict: 'org_id' });
+      setWebsitePreviewKey(k => k + 1);
+    } catch (err) {
+      console.warn('Logo upload failed:', err);
+    } finally {
+      setLogoUploading(false);
+      e.target.value = '';
     }
   };
 
@@ -749,7 +840,7 @@ export default function DashboardPage() {
     if (error && lead) setLeads(l => l.map(x => x.id === leadId ? { ...x, stage: prevStage || 'NEW' } : x));
     else if (!error && lead && (stage === 'WON' || stage === 'CONTRACT_SIGNED')) {
       await supabase.from('service_projects').insert({
-        org_id: org.id, lead_id: leadId, name: `${lead.company || lead.name} — Project`, status: 'ACTIVE',
+        org_id: org.id, lead_id: leadId, name: `${lead.company || lead.name} - Project`, status: 'ACTIVE',
       }).then(() => {});
     }
   };
@@ -823,7 +914,9 @@ export default function DashboardPage() {
       } catch (_) {}
     }
     setMarketingSending(false);
+    setMarketingSentCount(toSend.length);
     setMarketingCompose({ subject: '', body: '', recipientIds: [] });
+    setTimeout(() => setMarketingSentCount(0), 5000);
   };
 
   const addLead = async () => {
@@ -926,8 +1019,9 @@ export default function DashboardPage() {
     { id: 'marketing', label: 'Marketing', icon: Megaphone },
     { id: 'support', label: 'Support', icon: LifeBuoy },
     { id: 'team', label: 'Team', icon: UserPlus },
-    { id: 'billing', label: 'Billing', icon: CreditCard, permission: 'manage_billing' },
+    { id: 'billing', label: 'Plans & Billing', icon: CreditCard, permission: 'manage_billing' },
     { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'account', label: 'Account', icon: UserPlus },
   ];
   const nav = navItems.filter((n) => !n.permission || permissions[n.permission]);
 
@@ -985,24 +1079,27 @@ export default function DashboardPage() {
                 productRevenue={productRevenue}
                 weeklyRevenue={weeklyRevenue}
                 onNavigate={(t: Tab) => setTab(t)}
+                aiInsightsOpen={showAiInsightsModal}
+                onAiInsightsOpen={() => setShowAiInsightsModal(true)}
+                onAiInsightsClose={() => setShowAiInsightsModal(false)}
+                orgId={org?.id}
               />
             );
           })()}
           {tab === 'website' && (
             <div className="max-w-4xl">
-              <div className="mb-6 flex flex-wrap items-center gap-3 text-xs text-slate-600 bg-slate-50 rounded-lg px-4 py-3 border border-slate-200">
-                <span className="font-medium text-slate-700">Workflow:</span>
-                <Globe size={14} />
-                <span>Website</span>
-                <ArrowRight size={12} />
-                <span>Leads</span>
-                <ArrowRight size={12} />
-                <span>CRM</span>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-6">
-                {(['preview', 'branding', 'contact', 'cms', 'visual'] as const).map((st) => (
-                  <button key={st} onClick={() => setWebsiteSubTab(st)} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${websiteSubTab === st ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
-                    {st === 'preview' ? 'View site' : st === 'branding' ? 'Branding' : st === 'contact' ? 'Contact' : st === 'cms' ? 'Content' : 'Visual'}
+              <div className="flex flex-wrap gap-1.5 mb-6 border-b border-slate-200 pb-4">
+                {([
+                  { id: 'visual',   label: 'Page Builder' },
+                  { id: 'preview',  label: 'Live Preview' },
+                  { id: 'branding', label: 'Brand & Colours' },
+                  { id: 'contact',  label: 'Contact Info' },
+                  { id: 'cms',      label: 'Site Content' },
+                ] as const).map(({ id, label }) => (
+                  <button key={id} onClick={() => setWebsiteSubTab(id)}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${websiteSubTab === id ? 'text-white shadow-sm' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}
+                    style={websiteSubTab === id ? { background: '#163A63' } : {}}>
+                    {label}
                   </button>
                 ))}
               </div>
@@ -1023,13 +1120,99 @@ export default function DashboardPage() {
                 </div>
               )}
               {websiteSubTab === 'branding' && (
-                <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
-                  <h3 className="font-bold text-slate-800">Branding</h3>
-                  <div><label className="block text-sm font-medium mb-1">Company name</label><input type="text" value={branding.company_name} onChange={e => setBranding({ ...branding, company_name: e.target.value })} className="w-full p-2 border rounded text-sm" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Logo URL</label><input type="url" value={branding.logo_url} onChange={e => setBranding({ ...branding, logo_url: e.target.value })} placeholder="https://..." className="w-full p-2 border rounded text-sm" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Primary color</label><input type="text" value={branding.primary_color} onChange={e => setBranding({ ...branding, primary_color: e.target.value })} className="w-full p-2 border rounded text-sm" /></div>
-                  <div><label className="block text-sm font-medium mb-1">Business type</label><select value={branding.business_type} onChange={e => setBranding({ ...branding, business_type: e.target.value as 'product' | 'service' })} className="w-full p-2 border rounded text-sm"><option value="product">Product</option><option value="service">Service</option></select></div>
-                  <button onClick={saveBranding} disabled={!permissions.edit_branding} className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium disabled:opacity-50">{settingsSaved ? 'Saved' : 'Save Branding'}</button>
+                <div className="space-y-6">
+                  <div className="bg-white rounded-xl border border-slate-200 p-6">
+                    <h3 className="font-bold text-slate-800 mb-1">Brand Identity</h3>
+                    <p className="text-sm text-slate-500 mb-5">Your logo, colours and business type shape how your website looks.</p>
+                    <div className="space-y-5">
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Company name</label>
+                        <input type="text" value={branding.company_name} onChange={e => setBranding({ ...branding, company_name: e.target.value })} placeholder="e.g. Acme Co." className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-300" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Business Logo</label>
+                        <div className="flex items-start gap-4">
+                          {branding.logo_url ? (
+                            <div className="relative shrink-0">
+                              <img src={branding.logo_url} alt="Logo" className="h-16 max-w-[180px] object-contain rounded-xl border border-slate-200 p-2 bg-white" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                              <button type="button" onClick={() => setBranding({ ...branding, logo_url: '' })} className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs leading-none hover:bg-red-600">×</button>
+                            </div>
+                          ) : (
+                            <div className="w-20 h-16 rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center text-slate-400 shrink-0">
+                              <ImagePlus size={20} />
+                            </div>
+                          )}
+                          <div className="flex-1">
+                            <label className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium cursor-pointer hover:bg-slate-50 transition-colors ${logoUploading ? 'opacity-60 pointer-events-none' : ''}`}>
+                              {logoUploading ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
+                              {logoUploading ? 'Uploading…' : 'Upload logo'}
+                              <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+                            </label>
+                            <p className="text-xs text-slate-500 mt-2">PNG or SVG with transparent background recommended. Max 2 MB.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Brand colour</label>
+                        <div className="flex gap-3 items-center">
+                          <input type="color" value={branding.primary_color || '#163A63'} onChange={e => setBranding({ ...branding, primary_color: e.target.value })} className="w-14 h-12 rounded-xl border border-slate-200 cursor-pointer p-1" />
+                          <input type="text" value={branding.primary_color} onChange={e => setBranding({ ...branding, primary_color: e.target.value })} placeholder="#163A63" className="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-slate-300" />
+                        </div>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {['#163A63','#2F8F5B','#7C3AED','#DC2626','#0891B2','#D97706','#0F172A','#BE185D'].map(c => (
+                            <button key={c} type="button" onClick={() => setBranding({ ...branding, primary_color: c })} title={c}
+                              style={{ background: c, width: 28, height: 28, borderRadius: 8, border: branding.primary_color === c ? '3px solid #fff' : '2px solid transparent', boxShadow: branding.primary_color === c ? `0 0 0 2px ${c}` : 'none' }} />
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Business type</label>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                          {[
+                            { value: 'product', label: '📦 Products / Wholesale', desc: 'Physical goods, supply, retail' },
+                            { value: 'service', label: '🔧 Services', desc: 'Trades, agencies, freelance' },
+                            { value: 'consulting', label: '💼 Consulting', desc: 'Strategy, advice, coaching' },
+                            { value: 'tech', label: '💻 Tech / SaaS', desc: 'Software, apps, digital' },
+                            { value: 'food', label: '🍽️ Food & Beverage', desc: 'Catering, restaurant, drinks' },
+                            { value: 'other', label: '✨ Other', desc: 'Any other business type' },
+                          ].map(opt => (
+                            <button key={opt.value} type="button" onClick={() => setBranding({ ...branding, business_type: opt.value as 'product' | 'service' })}
+                              className={`p-3 rounded-xl border text-left transition-all ${branding.business_type === opt.value ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'}`}>
+                              <div className="text-sm font-semibold">{opt.label}</div>
+                              <div className={`text-xs mt-0.5 ${branding.business_type === opt.value ? 'text-slate-300' : 'text-slate-500'}`}>{opt.desc}</div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Social media</label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">📸</span>
+                            <input type="url" value={branding.instagram_url} onChange={e => setBranding({ ...branding, instagram_url: e.target.value })} placeholder="Instagram URL" className="flex-1 px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-300" />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">👥</span>
+                            <input type="url" value={branding.facebook_url} onChange={e => setBranding({ ...branding, facebook_url: e.target.value })} placeholder="Facebook URL" className="flex-1 px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-300" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button onClick={saveBranding} disabled={!permissions.edit_branding} className="mt-6 px-6 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 disabled:opacity-50 transition-colors">
+                      {settingsSaved ? '✓ Saved!' : 'Save Branding'}
+                    </button>
+                  </div>
+                  {/* Live colour preview */}
+                  <div className="bg-white rounded-xl border border-slate-200 p-6">
+                    <h4 className="font-semibold text-slate-800 mb-3">Colour Preview</h4>
+                    <div className="rounded-xl overflow-hidden border border-slate-200" style={{ background: `linear-gradient(135deg, ${branding.primary_color || '#163A63'} 0%, #0f172a 100%)` }}>
+                      <div className="p-6">
+                        <div className="text-2xl font-black text-white mb-2">{branding.company_name || 'Your Company'}</div>
+                        <p className="text-white/70 text-sm mb-4">This is how your website hero will look.</p>
+                        <div className="inline-flex items-center gap-2 bg-white text-sm font-bold px-4 py-2 rounded-full" style={{ color: branding.primary_color || '#163A63' }}>Get Started →</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
               {websiteSubTab === 'contact' && (
@@ -1048,13 +1231,25 @@ export default function DashboardPage() {
               {websiteSubTab === 'cms' && (
                 <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-6">
                   <div>
-                    <h3 className="font-bold text-slate-800 mb-2">Website content</h3>
-                    <p className="text-sm text-slate-600 mb-4">Start with a template or edit the fields below.</p>
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      <button onClick={() => applyTemplate('product')} className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Product</button>
-                      <button onClick={() => applyTemplate('service')} className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Service</button>
-                      <button onClick={() => applyTemplate('consulting')} className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Consulting</button>
+                    <h3 className="font-bold text-slate-800 mb-1">Website Content</h3>
+                    <p className="text-sm text-slate-500 mb-5">Pick a template to instantly fill your website with professional content, then customise it.</p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-2">
+                      {(Object.entries(WEBSITE_TEMPLATES) as [keyof typeof WEBSITE_TEMPLATES, typeof WEBSITE_TEMPLATES[keyof typeof WEBSITE_TEMPLATES]][]).map(([key, tpl]) => (
+                        <button key={key} type="button" onClick={() => applyTemplate(key)}
+                          className="relative group flex flex-col items-start p-4 rounded-xl border-2 transition-all text-left hover:shadow-md"
+                          style={{ borderColor: websiteCms.hero_title === tpl.hero_title ? tpl.color : '#e2e8f0', background: websiteCms.hero_title === tpl.hero_title ? `${tpl.color}10` : '#f8fafc' }}>
+                          <div className="w-full h-20 rounded-lg mb-3 flex items-center justify-center text-3xl font-black text-white" style={{ background: `linear-gradient(135deg, ${tpl.color} 0%, #0f172a 100%)` }}>
+                            {tpl.emoji}
+                          </div>
+                          <div className="text-xs font-bold text-slate-800 leading-tight">{tpl.label}</div>
+                          <div className="text-[10px] text-slate-500 mt-0.5 line-clamp-2">{tpl.hero_title}</div>
+                          {websiteCms.hero_title === tpl.hero_title && (
+                            <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style={{ background: tpl.color }}>✓</div>
+                          )}
+                        </button>
+                      ))}
                     </div>
+                    <p className="text-xs text-slate-500">Click any template to apply it, then customise the text below.</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm text-slate-600">Or use AI to generate copy.</p>
@@ -1089,7 +1284,7 @@ export default function DashboardPage() {
               {websiteSubTab === 'visual' && (
                 <div>
                   <h3 className="font-bold text-slate-800 mb-4">Visual builder</h3>
-                  <VisualBuilder />
+                  <VisualBuilder primaryColor={branding.primary_color || '#163A63'} orgId={org?.id} />
                 </div>
               )}
             </div>
@@ -1164,9 +1359,14 @@ export default function DashboardPage() {
                 </div>
               ) : crmViewType === 'services' ? (
                 <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                  <div className="p-4 border-b border-slate-200 bg-slate-50">
-                    <h3 className="font-semibold text-slate-800">Service projects</h3>
-                    <p className="text-sm text-slate-500">Projects created when leads are marked Won</p>
+                  <div className="p-4 border-b border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <h3 className="font-semibold text-slate-800">Service projects</h3>
+                      <p className="text-sm text-slate-500">Projects from won leads or add manually</p>
+                    </div>
+                    <button onClick={() => setAddProjectModal(true)} className="flex items-center gap-2 px-3 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700">
+                      <Plus size={16} /> Add project
+                    </button>
                   </div>
                   {serviceProjects.length === 0 ? (
                     <div className="p-8 text-center text-slate-500">No projects yet. Move a consulting lead to Won or Contract Signed to auto-create a project.</div>
@@ -1233,6 +1433,21 @@ export default function DashboardPage() {
                   setLeadNextAction={setLeadNextAction}
                 />
               )}
+              {addProjectModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={() => setAddProjectModal(false)}>
+                  <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
+                    <h3 className="font-bold text-slate-800 mb-4">Add project</h3>
+                    <div className="space-y-3">
+                      <div><label className="block text-sm font-medium text-slate-700 mb-1">Project name</label><input type="text" placeholder="e.g. Strategy workshop - Acme" value={addProjectForm.name} onChange={e => setAddProjectForm({ ...addProjectForm, name: e.target.value })} className="w-full p-2 border rounded text-sm" /></div>
+                      <div><label className="block text-sm font-medium text-slate-700 mb-1">Credits / hours</label><input type="number" min={0} placeholder="e.g. 20" value={addProjectForm.credits || ''} onChange={e => setAddProjectForm({ ...addProjectForm, credits: Number(e.target.value) || 0 })} className="w-full p-2 border rounded text-sm" /></div>
+                    </div>
+                    <div className="flex gap-2 mt-4">
+                      <button onClick={async () => { if (!supabase || !org || !addProjectForm.name.trim()) return; await supabase.from('service_projects').insert({ org_id: org.id, name: addProjectForm.name.trim(), credits_total: addProjectForm.credits || 0, status: 'ACTIVE' }); const { data } = await supabase.from('service_projects').select('id, name, status, credits_total, lead_id').eq('org_id', org.id).order('created_at', { ascending: false }).limit(100); setServiceProjects((data || []).map((p: Record<string, unknown>) => ({ id: String(p.id), name: String(p.name || 'Project'), status: String(p.status || 'ACTIVE'), credits_total: Number(p.credits_total || 0), lead_id: p.lead_id ? String(p.lead_id) : undefined }))); setAddProjectModal(false); setAddProjectForm({ name: '', credits: 0 }); }} disabled={!addProjectForm.name.trim()} className="px-4 py-2 bg-emerald-600 text-white rounded text-sm font-medium disabled:opacity-50 hover:bg-emerald-700">Add</button>
+                      <button onClick={() => { setAddProjectModal(false); setAddProjectForm({ name: '', credits: 0 }); }} className="px-4 py-2 bg-slate-100 text-slate-700 rounded text-sm">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              )}
               {addLeadModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={() => setAddLeadModal(false)}>
                   <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
@@ -1285,7 +1500,7 @@ export default function DashboardPage() {
                     </div>
                     {leadNotes.length > 0 && (
                       <div className="mt-6">
-                        <h4 className="text-xs font-medium text-slate-500 uppercase mb-2">Contact 360 — Activity timeline</h4>
+                        <h4 className="text-xs font-medium text-slate-500 uppercase mb-2">Contact 360 - Activity timeline</h4>
                         <div className="space-y-2 max-h-40 overflow-y-auto">
                           {leadNotes.map((n, i) => (
                             <div key={i} className="p-2 bg-slate-50 rounded text-sm">
@@ -1308,9 +1523,39 @@ export default function DashboardPage() {
                 <p className="text-sm text-slate-500">Get leads and send emails. Run Facebook ads, point them to your site, and leads drop into CRM.</p>
               </div>
               <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-800 mb-3">Automations</h3>
-                <p className="text-sm text-slate-600 mb-4">Rule example: &quot;If lead in Proposal for 3+ days, send follow-up email.&quot; Use the Marketing tab to select leads and send bulk emails manually until automations are configured.</p>
-                <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 text-sm text-slate-500">Automation engine will support stage-based triggers and scheduled emails.</div>
+                <h3 className="font-semibold text-slate-800 mb-3">Quick Email Templates</h3>
+                <p className="text-sm text-slate-600 mb-4">Click a template to auto-fill the email composer below. Works great for follow-ups and stage-based outreach.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {[
+                    { label: '👋 New lead intro', subject: 'Thank you for reaching out, {name}!', body: `Hi {name},\n\nThank you for getting in touch with us. We received your enquiry and will follow up within 1-2 business days.\n\nIn the meantime, feel free to reply to this email if you have any questions.\n\nBest regards,\n${org?.name || 'Our Team'}` },
+                    { label: '📋 Proposal follow-up', subject: 'Following up on your proposal, {name}', body: `Hi {name},\n\nI wanted to follow up on the proposal we sent over. I hope you've had a chance to review it.\n\nAre there any questions I can answer or adjustments you'd like to discuss? I'm happy to jump on a quick call.\n\nLooking forward to hearing from you.\n\nBest regards,\n${org?.name || 'Our Team'}` },
+                    { label: '🔁 Re-engagement', subject: 'Checking in - any update, {name}?', body: `Hi {name},\n\nI hope you're doing well! I'm following up to see if you'd still like to move forward, or if your priorities have changed.\n\nNo pressure at all. Just want to make sure I'm not missing anything on our end.\n\nLet me know if now is a good time to connect.\n\nBest regards,\n${org?.name || 'Our Team'}` },
+                    { label: '🎉 Deal won / welcome', subject: 'Welcome aboard, {name}! 🎉', body: `Hi {name},\n\nWe're thrilled to welcome you as a client! Everything is now set up on our end.\n\nWe'll be in touch shortly with next steps. In the meantime, please don't hesitate to reach out with any questions.\n\nLooking forward to working together!\n\nBest regards,\n${org?.name || 'Our Team'}` },
+                    { label: '📞 Book a call', subject: 'Let\'s find time to chat, {name}', body: `Hi {name},\n\nI'd love to schedule a quick call to better understand your needs and see how we can help.\n\nDoes 15–20 minutes this week or next work for you? Feel free to suggest a time, or book directly here: [your calendar link]\n\nLooking forward to connecting!\n\nBest regards,\n${org?.name || 'Our Team'}` },
+                    { label: '🛒 Abandoned quote', subject: 'Your quote is ready - {name}', body: `Hi {name},\n\nJust a quick note. Your quote is ready and waiting! We'd hate for you to miss out.\n\nIf you have any questions or would like to adjust anything, just reply and I'll take care of it right away.\n\nBest regards,\n${org?.name || 'Our Team'}` },
+                  ].map((tpl) => (
+                    <button key={tpl.label} type="button" onClick={() => setMarketingCompose({ subject: tpl.subject, body: tpl.body, recipientIds: [] })} className="text-left p-3 rounded-lg border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 text-sm transition-colors">
+                      <div className="font-medium text-slate-800">{tpl.label}</div>
+                      <div className="text-xs text-slate-500 mt-0.5 truncate">{tpl.subject}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-white rounded-xl border border-slate-200 p-6">
+                <h3 className="font-semibold text-slate-800 mb-2">Stage-based targeting</h3>
+                <p className="text-sm text-slate-600 mb-3">Select leads by pipeline stage to send targeted emails. Useful for sending follow-ups only to leads in Proposal or Negotiation.</p>
+                <div className="flex flex-wrap gap-2">
+                  {['NEW', 'QUALIFIED', 'PROPOSAL', 'NEGOTIATION', 'DISCOVERY', 'STRATEGY_SESSION', 'CONTRACT_SIGNED'].map(stage => {
+                    const stageLeads = leads.filter(l => l.stage === stage);
+                    if (stageLeads.length === 0) return null;
+                    return (
+                      <button key={stage} type="button" onClick={() => setMarketingCompose(prev => ({ ...prev, recipientIds: stageLeads.map(l => l.id) }))} className="px-3 py-1.5 text-xs rounded-full border border-slate-200 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-300 font-medium text-slate-700">
+                        {stage.replace(/_/g, ' ')} ({stageLeads.length})
+                      </button>
+                    );
+                  })}
+                  {leads.length === 0 && <p className="text-sm text-slate-500">No leads yet. Add leads from the CRM tab first.</p>}
+                </div>
               </div>
               <div className="bg-white rounded-xl border border-slate-200 p-6">
                 <h3 className="font-semibold text-slate-800 mb-3">Lead sources</h3>
@@ -1378,6 +1623,11 @@ export default function DashboardPage() {
                   <textarea value={marketingCompose.body} onChange={e => setMarketingCompose({ ...marketingCompose, body: e.target.value })} placeholder={`Hi {name},\n\n...\n\nBest regards`} rows={6} className="w-full p-3 border border-slate-200 rounded-lg text-sm resize-none" />
                   <p className="text-xs text-slate-500 mt-1">Use {"{name}"} for first name, {"{company}"} for company.</p>
                 </div>
+                {marketingSentCount > 0 && (
+                  <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-800 font-medium flex items-center gap-2">
+                    <span>✅</span> Sent to {marketingSentCount} recipient{marketingSentCount !== 1 ? 's' : ''}!
+                  </div>
+                )}
                 <button onClick={sendBulkEmail} disabled={marketingSending || leads.length === 0 || !marketingCompose.subject.trim() || !marketingCompose.body.trim()} className="w-full py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 disabled:opacity-50 flex items-center justify-center gap-2">
                   {marketingSending ? <Loader2 size={18} className="animate-spin" /> : <Mail size={18} />}
                   {marketingSending ? 'Sending...' : `Send to ${marketingCompose.recipientIds.length > 0 ? marketingCompose.recipientIds.length : leads.length} recipient${(marketingCompose.recipientIds.length || leads.length) === 1 ? '' : 's'}`}
@@ -1564,42 +1814,523 @@ export default function DashboardPage() {
               {permissions.edit_branding ? (
                 <>
                   <div className="p-6 bg-white rounded-xl border border-slate-200">
-                    <h3 className="font-bold text-slate-800 mb-4">Organization</h3>
-                    <div className="space-y-3">
-                      <div><label className="block text-sm font-medium text-slate-700 mb-1">Organization name</label><input type="text" value={org?.name || ''} onChange={async (e) => { const n = e.target.value; if (org && n.trim()) { await supabase?.from('organizations').update({ name: n.trim() }).eq('id', org.id); setOrg(o => o ? { ...o, name: n.trim() } : o); } }} className="w-full p-3 border border-slate-200 rounded-lg text-sm" placeholder="Your company name" /></div>
-                      <p className="text-xs text-slate-500">ID: {org?.id}</p>
+                    <h3 className="font-bold text-slate-800 mb-1">Organization</h3>
+                    <p className="text-xs text-slate-500 mb-4">Basic info about your organization.</p>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Organization name</label>
+                        <input type="text" value={org?.name || ''} onChange={async (e) => { const n = e.target.value; if (org && n.trim()) { await supabase?.from('organizations').update({ name: n.trim() }).eq('id', org.id); setOrg(o => o ? { ...o, name: n.trim() } : o); } }} className="w-full p-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-300" placeholder="Your company name" />
+                      </div>
+                      <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                        <div>
+                          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Organization ID</p>
+                          <p className="text-sm font-mono text-slate-700 mt-0.5">{org?.id}</p>
+                        </div>
+                        <button type="button" onClick={() => navigator.clipboard?.writeText(org?.id || '')} className="ml-auto text-xs text-slate-500 hover:text-slate-700 px-2 py-1 rounded border border-slate-200 bg-white">Copy</button>
+                      </div>
                     </div>
                   </div>
+
+                  <div className="p-6 bg-white rounded-xl border border-slate-200">
+                    <h3 className="font-bold text-slate-800 mb-1">Website & Domain</h3>
+                    <p className="text-sm text-slate-500 mb-4">Your business website is live at the URL below. Share it anywhere.</p>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 p-3 bg-slate-50 rounded-xl border border-slate-200 font-mono text-sm text-slate-700 break-all">
+                          {typeof window !== 'undefined' ? `${window.location.origin}/site/${org?.id}` : `/site/${org?.id}`}
+                        </div>
+                        <button type="button" onClick={() => navigator.clipboard?.writeText(typeof window !== 'undefined' ? `${window.location.origin}/site/${org?.id}` : '')} className="px-3 py-3 rounded-xl border border-slate-200 bg-white text-sm hover:bg-slate-50 shrink-0">Copy</button>
+                        <a href={`/site/${org?.id}`} target="_blank" rel="noopener noreferrer" className="px-3 py-3 rounded-xl bg-slate-900 text-white text-sm hover:bg-slate-800 shrink-0 flex items-center gap-1.5">
+                          <ExternalLink size={14} /> View
+                        </a>
+                      </div>
+                      <p className="text-xs text-slate-500">Custom domain support coming soon. For now, share this URL or set it as a redirect from your own domain.</p>
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-white rounded-xl border border-slate-200">
+                    <h3 className="font-bold text-slate-800 mb-1">Notification Email</h3>
+                    <p className="text-sm text-slate-500 mb-4">When someone submits your contact form, where should we send the lead notification?</p>
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-1.5">Notification email</label>
+                      <input type="email" value={branding.contact_email} onChange={e => setBranding({ ...branding, contact_email: e.target.value })} placeholder="you@company.com" className="w-full p-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-300" />
+                      <p className="text-xs text-slate-500 mt-1.5">This is your private ops email. Customers never see it.</p>
+                    </div>
+                    <button onClick={saveBranding} disabled={!permissions.edit_branding} className="mt-4 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 disabled:opacity-50">
+                      {settingsSaved ? '✓ Saved!' : 'Save'}
+                    </button>
+                  </div>
+
                   <div className="p-6 bg-white rounded-xl border border-slate-200">
                     <h3 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
-                      <Shield size={18} /> Two-Factor Authentication
+                      <Shield size={18} /> Account Security
                     </h3>
-                    <p className="text-sm text-slate-600 mb-4">Protect your account with TOTP. Use Google Authenticator or Authy to verify sign-in.</p>
-                    <a href="https://supabase.com/docs/guides/auth/auth-mfa" target="_blank" rel="noopener noreferrer" className="inline-flex px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700">Enable 2FA (docs)</a>
+                    <p className="text-sm text-slate-600 mb-1">Signed in as: <span className="font-medium">{user?.email}</span></p>
+                    <p className="text-sm text-slate-600 mb-4">Enable Two-Factor Authentication (2FA) for extra account security.</p>
+                    <a href="https://supabase.com/docs/guides/auth/auth-mfa" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700">
+                      <Shield size={16} /> Enable 2FA
+                    </a>
+                  </div>
+
+                  {/* Connections & Integrations */}
+                  <div className="p-6 bg-white rounded-xl border border-slate-200">
+                    <h3 className="font-bold text-slate-800 mb-1 flex items-center gap-2">🔌 Connections & Integrations</h3>
+                    <p className="text-sm text-slate-500 mb-5">Connect your marketing tools so leads from ads and social flow straight into your pipeline.</p>
+
+                    {/* Facebook Pixel */}
+                    <div className="mb-5 p-4 rounded-xl border border-slate-200 bg-slate-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg">📘</span>
+                        <p className="font-semibold text-sm text-slate-800">Facebook / Meta Pixel</p>
+                        {branding.facebook_pixel_id ? <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">Connected</span> : <span className="ml-auto text-[10px] bg-slate-200 text-slate-500 font-bold px-2 py-0.5 rounded-full">Not connected</span>}
+                      </div>
+                      <p className="text-xs text-slate-500 mb-2">Paste your Pixel ID and it will be automatically added to your website. Tracks visitors from your Facebook/Instagram ads.</p>
+                      <input type="text" value={branding.facebook_pixel_id} onChange={e => setBranding({ ...branding, facebook_pixel_id: e.target.value })} placeholder="e.g. 1234567890123456" className="w-full p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-300 bg-white" />
+                    </div>
+
+                    {/* Google Analytics */}
+                    <div className="mb-5 p-4 rounded-xl border border-slate-200 bg-slate-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg">🔍</span>
+                        <p className="font-semibold text-sm text-slate-800">Google Analytics 4</p>
+                        {branding.ga_id ? <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">Connected</span> : <span className="ml-auto text-[10px] bg-slate-200 text-slate-500 font-bold px-2 py-0.5 rounded-full">Not connected</span>}
+                      </div>
+                      <p className="text-xs text-slate-500 mb-2">Track website traffic and visitor behaviour. Paste your GA4 Measurement ID (starts with G-).</p>
+                      <input type="text" value={branding.ga_id} onChange={e => setBranding({ ...branding, ga_id: e.target.value })} placeholder="e.g. G-XXXXXXXXXX" className="w-full p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-300 bg-white" />
+                    </div>
+
+                    {/* Auto welcome email */}
+                    <div className="mb-5 p-4 rounded-xl border border-slate-200 bg-slate-50">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">✉️</span>
+                          <p className="font-semibold text-sm text-slate-800">Auto Welcome Email</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setBranding(b => ({ ...b, auto_welcome_email: !b.auto_welcome_email }))}
+                          className={`relative w-10 h-5 rounded-full transition-colors ${branding.auto_welcome_email ? 'bg-emerald-500' : 'bg-slate-300'}`}
+                        >
+                          <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${branding.auto_welcome_email ? 'translate-x-5' : ''}`} />
+                        </button>
+                      </div>
+                      <p className="text-xs text-slate-500">When someone fills your contact form, automatically send them a welcome email so they know you received their enquiry.</p>
+                    </div>
+
+                    {/* Custom domain */}
+                    <div className="mb-5 p-4 rounded-xl border border-blue-100 bg-blue-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg">🌐</span>
+                        <p className="font-semibold text-sm text-slate-800">Custom Domain</p>
+                        <span className="ml-auto text-[10px] bg-blue-200 text-blue-700 font-bold px-2 py-0.5 rounded-full">Coming soon</span>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-2">Point your own domain (e.g. <span className="font-mono">yourcompany.com</span>) to your Stoklync website. In the meantime, set up a redirect from your domain registrar.</p>
+                      <div className="text-xs bg-white rounded-lg p-3 border border-blue-200 font-mono text-slate-600">
+                        Your current site URL:<br />
+                        <span className="text-indigo-600 break-all">{typeof window !== 'undefined' ? `${window.location.origin}/site/${org?.id}` : `/site/${org?.id}`}</span>
+                      </div>
+                    </div>
+
+                    {/* WhatsApp */}
+                    <div className="p-4 rounded-xl border border-slate-200 bg-slate-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg">💬</span>
+                        <p className="font-semibold text-sm text-slate-800">WhatsApp Button</p>
+                        {branding.whatsapp ? <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">Active</span> : <span className="ml-auto text-[10px] bg-slate-200 text-slate-500 font-bold px-2 py-0.5 rounded-full">Not set</span>}
+                      </div>
+                      <p className="text-xs text-slate-500 mb-2">Add your WhatsApp number and a floating chat button appears on your website so customers can reach you instantly.</p>
+                      <input type="tel" value={branding.whatsapp} onChange={e => setBranding({ ...branding, whatsapp: e.target.value })} placeholder="+1 876 000 0000" className="w-full p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-300 bg-white" />
+                    </div>
+
+                    <button onClick={saveBranding} disabled={!permissions.edit_branding} className="mt-5 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 disabled:opacity-50 flex items-center gap-2">
+                      {settingsSaved ? '✓ Connections saved!' : 'Save connections'}
+                    </button>
                   </div>
                 </>
               ) : (
                 <div className="p-6 bg-white rounded-xl border border-slate-200">
                   <h3 className="font-bold text-slate-800 mb-2">Organization</h3>
-                  <p className="text-slate-600">{org?.name} ({org?.id})</p>
+                  <p className="text-slate-600">{org?.name}</p>
+                  <p className="text-sm text-slate-500 mt-1">ID: {org?.id}</p>
                   <p className="text-sm text-slate-500 mt-4">Contact your admin to change settings.</p>
                 </div>
               )}
             </div>
           )}
           {tab === 'billing' && (
-            <div className="max-w-2xl space-y-6">
-              <div className="p-6 bg-white rounded-xl border border-slate-200">
-                <h3 className="font-bold text-slate-800 mb-2">Subscription</h3>
-                <p className="text-sm text-slate-600 mb-4">Manage your plan and payment methods. Connect Stripe to accept payments and take a success fee on sales.</p>
-                <div className="flex flex-wrap gap-3">
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-sm font-medium">Free tier active</span>
-                  <a href="https://stripe.com/docs/connect" target="_blank" rel="noopener noreferrer" className="text-sm text-indigo-600 hover:underline font-medium">Stripe Connect docs →</a>
+            <div className="max-w-4xl space-y-8">
+              {/* Current plan status */}
+              <div className={`rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${currentPlan === 'free_trial' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white' : currentPlan === 'pro' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white' : 'bg-gradient-to-r from-slate-800 to-slate-900 text-white'}`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-lg">{currentPlan === 'free_trial' ? '⏳' : currentPlan === 'starter' ? '🌱' : currentPlan === 'business' ? '🚀' : '💎'}</span>
+                    <p className="font-bold text-lg">{currentPlan === 'free_trial' ? 'Free Trial' : currentPlan === 'starter' ? 'Starter Plan' : currentPlan === 'business' ? 'Business Plan' : 'Pro Plan'}</p>
+                    <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full font-semibold">
+                      {currentPlan === 'free_trial' ? 'ACTIVE' : 'SUBSCRIBED'}
+                    </span>
+                  </div>
+                  <p className="text-sm opacity-80">
+                    {currentPlan === 'free_trial'
+                      ? `${trialDaysLeft} days remaining in your free trial. No credit card required yet.`
+                      : currentPlan === 'starter' ? 'Your Starter plan renews monthly. Upgrade anytime.'
+                      : currentPlan === 'business' ? 'Your Business plan renews monthly. Full feature access.'
+                      : 'You\'re on the Pro plan. Full access to everything.'}
+                  </p>
+                </div>
+                {currentPlan === 'free_trial' && (
+                  <button onClick={() => setCurrentPlan('business')} className="bg-white text-orange-600 font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-orange-50 transition-colors shrink-0">
+                    Upgrade now →
+                  </button>
+                )}
+              </div>
+
+              {/* Plans grid */}
+              <div>
+                <h2 className="text-xl font-bold text-slate-900 mb-2">Choose your plan</h2>
+                <p className="text-slate-500 text-sm mb-6">All plans include your live website, CRM, and email marketing. Cancel anytime.</p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[
+                    {
+                      id: 'free_trial' as const,
+                      name: 'Free Trial',
+                      price: '$0',
+                      period: '14 days',
+                      emoji: '⏳',
+                      color: 'border-amber-300',
+                      badge: 'Try free',
+                      badgeColor: 'bg-amber-100 text-amber-700',
+                      features: ['1 website', '10 leads/month', 'Basic templates', 'Email marketing (50/mo)', 'CRM pipeline', 'Community support'],
+                      cta: 'Current plan',
+                      ctaDisabled: true,
+                    },
+                    {
+                      id: 'starter' as const,
+                      name: 'Starter',
+                      price: '$19',
+                      period: '/month',
+                      emoji: '🌱',
+                      color: 'border-slate-200',
+                      badge: 'Popular',
+                      badgeColor: 'bg-slate-100 text-slate-600',
+                      features: ['1 website', '100 leads/month', 'All templates', 'Email marketing (500/mo)', 'CRM pipeline', 'Facebook Pixel', 'Google Analytics', 'Email support'],
+                      cta: currentPlan === 'starter' ? '✓ Current plan' : 'Get Starter',
+                      ctaDisabled: currentPlan === 'starter',
+                    },
+                    {
+                      id: 'business' as const,
+                      name: 'Business',
+                      price: '$49',
+                      period: '/month',
+                      emoji: '🚀',
+                      color: 'border-indigo-400 ring-2 ring-indigo-400',
+                      badge: 'Most popular',
+                      badgeColor: 'bg-indigo-100 text-indigo-700',
+                      features: ['3 websites', 'Unlimited leads', 'All templates + Visual builder', 'Unlimited email marketing', 'Full CRM + Pipeline', 'All integrations', 'Auto welcome emails', 'Priority support', 'WhatsApp button'],
+                      cta: currentPlan === 'business' ? '✓ Current plan' : 'Get Business',
+                      ctaDisabled: currentPlan === 'business',
+                    },
+                    {
+                      id: 'pro' as const,
+                      name: 'Pro',
+                      price: '$99',
+                      period: '/month',
+                      emoji: '💎',
+                      color: 'border-purple-400',
+                      badge: 'Agency ready',
+                      badgeColor: 'bg-purple-100 text-purple-700',
+                      features: ['Unlimited websites', 'Unlimited leads', 'White-label dashboard', 'Custom domain', 'API access', 'Team members (10)', 'Dedicated account manager', 'SLA support', 'Advanced analytics'],
+                      cta: currentPlan === 'pro' ? '✓ Current plan' : 'Get Pro',
+                      ctaDisabled: currentPlan === 'pro',
+                    },
+                  ].map(plan => (
+                    <div key={plan.id} className={`bg-white rounded-2xl border-2 ${plan.color} p-5 flex flex-col relative`}>
+                      {plan.id === 'business' && (
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Most Popular</div>
+                      )}
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-2xl">{plan.emoji}</span>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${plan.badgeColor}`}>{plan.badge}</span>
+                      </div>
+                      <p className="font-bold text-slate-900 text-lg">{plan.name}</p>
+                      <div className="flex items-end gap-1 mt-1 mb-4">
+                        <span className="text-3xl font-black text-slate-900">{plan.price}</span>
+                        <span className="text-slate-400 text-sm mb-1">{plan.period}</span>
+                      </div>
+                      <ul className="space-y-1.5 flex-1 mb-5">
+                        {plan.features.map(f => (
+                          <li key={f} className="flex items-start gap-2 text-xs text-slate-600">
+                            <span className="text-emerald-500 font-bold mt-0.5 shrink-0">✓</span>
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                      <button
+                        onClick={() => { if (!plan.ctaDisabled) setCurrentPlan(plan.id); }}
+                        disabled={plan.ctaDisabled}
+                        className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all ${
+                          plan.ctaDisabled
+                            ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                            : plan.id === 'business'
+                              ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                              : 'bg-slate-900 text-white hover:bg-slate-800'
+                        }`}
+                      >
+                        {plan.cta}
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="p-6 bg-white rounded-xl border border-slate-200">
-                <h3 className="font-bold text-slate-800 mb-2">Success fees</h3>
-                <p className="text-sm text-slate-600">When you connect Stripe, the platform can deduct 1–2% from each sale. You keep the rest.</p>
+
+              {/* Billing details */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="bg-white rounded-2xl border border-slate-200 p-5">
+                  <h3 className="font-bold text-slate-800 mb-1 flex items-center gap-2"><CreditCard size={16} /> Payment Method</h3>
+                  <p className="text-sm text-slate-500 mb-4">No payment method on file yet. You&apos;ll be asked to add one when upgrading.</p>
+                  <button className="px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800">Add payment method</button>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-slate-200 p-5">
+                  <h3 className="font-bold text-slate-800 mb-1">Billing History</h3>
+                  <p className="text-sm text-slate-500 mb-4">No invoices yet. They&apos;ll appear here after your first payment.</p>
+                  <div className="text-center py-4">
+                    <span className="text-3xl">🧾</span>
+                    <p className="text-xs text-slate-400 mt-1">No invoices</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* FAQ */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                <h3 className="font-bold text-slate-800 mb-4">Frequently asked questions</h3>
+                <div className="space-y-4">
+                  {[
+                    { q: 'Can I cancel anytime?', a: 'Yes. Cancel anytime from this page with no penalties. Your website stays live until the end of your billing period.' },
+                    { q: 'What happens after the free trial?', a: 'After 14 days you can choose a paid plan or stay on a limited free tier. Your data is never deleted.' },
+                    { q: 'Do you offer refunds?', a: 'Yes. If you\'re not satisfied within the first 7 days of a paid plan, contact us for a full refund.' },
+                    { q: 'Can I change plans later?', a: 'Absolutely. Upgrade or downgrade anytime. Prorated credits are applied automatically.' },
+                  ].map(faq => (
+                    <div key={faq.q} className="border-b border-slate-100 pb-4 last:border-0 last:pb-0">
+                      <p className="text-sm font-semibold text-slate-800 mb-1">{faq.q}</p>
+                      <p className="text-sm text-slate-500">{faq.a}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Cancel / danger */}
+              {currentPlan !== 'free_trial' && (
+                <div className="bg-red-50 border border-red-200 rounded-2xl p-5">
+                  <h3 className="font-semibold text-red-800 mb-1">Cancel subscription</h3>
+                  <p className="text-sm text-red-600 mb-3">Your website and data will remain accessible until the end of your current billing period.</p>
+                  {showCancelConfirm ? (
+                    <div className="flex items-center gap-3">
+                      <p className="text-sm text-red-700 font-medium">Are you sure?</p>
+                      <button onClick={() => { setCurrentPlan('free_trial'); setShowCancelConfirm(false); }} className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700">Yes, cancel</button>
+                      <button onClick={() => setShowCancelConfirm(false)} className="px-3 py-1.5 bg-white border border-red-200 text-red-600 rounded-lg text-sm font-semibold hover:bg-red-50">Keep plan</button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setShowCancelConfirm(true)} className="px-4 py-2 border border-red-300 text-red-700 rounded-xl text-sm font-semibold hover:bg-red-100 transition-colors">Cancel subscription</button>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {tab === 'account' && (
+            <div className="max-w-2xl space-y-6">
+              {/* Profile */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                <h3 className="font-bold text-slate-800 mb-1 flex items-center gap-2"><span>👤</span> Profile</h3>
+                <p className="text-sm text-slate-500 mb-5">Your personal information. This is separate from your organisation branding.</p>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
+                    {(profileForm.name || profileForm.email || '?')[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-900">{profileForm.name || 'Your Name'}</p>
+                    <p className="text-sm text-slate-500">{profileForm.email}</p>
+                    <span className="inline-flex items-center mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 uppercase">
+                      {members.find(m => m.email === user?.email)?.role || 'Owner'}
+                    </span>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full name</label>
+                    <input type="text" value={profileForm.name} onChange={e => setProfileForm(f => ({ ...f, name: e.target.value }))} className="w-full p-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-300" placeholder="Your full name" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email address</label>
+                    <input type="email" value={profileForm.email} readOnly className="w-full p-3 border border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-400 cursor-not-allowed" />
+                    <p className="text-xs text-slate-400 mt-1">Email cannot be changed here. Contact support if needed.</p>
+                  </div>
+                </div>
+                <button
+                  onClick={async () => {
+                    if (supabase && profileForm.name.trim()) {
+                      await supabase.auth.updateUser({ data: { name: profileForm.name.trim() } });
+                      if (org) await supabase.from('team_members').update({ name: profileForm.name.trim() }).eq('user_id', user?.id || '').eq('org_id', org.id);
+                      setProfileSaved(true);
+                      setTimeout(() => setProfileSaved(false), 2000);
+                    }
+                  }}
+                  className="mt-4 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800"
+                >
+                  {profileSaved ? '✓ Saved!' : 'Save profile'}
+                </button>
+              </div>
+
+              {/* Organisation */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                <h3 className="font-bold text-slate-800 mb-1 flex items-center gap-2"><span>🏢</span> Organisation</h3>
+                <p className="text-sm text-slate-500 mb-4">Your business workspace. All team members share this organisation.</p>
+                <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-white font-bold text-lg">
+                    {(org?.name || 'O')[0].toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-slate-900">{org?.name}</p>
+                    <p className="text-xs text-slate-400 font-mono truncate">{org?.id}</p>
+                  </div>
+                  <button onClick={() => setTab('settings')} className="text-xs text-indigo-600 font-semibold hover:text-indigo-800 shrink-0">Edit →</button>
+                </div>
+                <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+                  {[
+                    { label: 'Team members', value: members.length },
+                    { label: 'Total leads', value: leads.length },
+                    { label: 'Active tickets', value: tickets.filter(t => t.status === 'OPEN').length },
+                  ].map(s => (
+                    <div key={s.label} className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                      <p className="text-xl font-bold text-slate-900">{s.value}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Subscription summary */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                <h3 className="font-bold text-slate-800 mb-1 flex items-center gap-2"><CreditCard size={16} /> Current Plan</h3>
+                <div className="flex items-center justify-between mt-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{currentPlan === 'free_trial' ? '⏳' : currentPlan === 'starter' ? '🌱' : currentPlan === 'business' ? '🚀' : '💎'}</span>
+                    <div>
+                      <p className="font-bold text-slate-900">{currentPlan === 'free_trial' ? 'Free Trial' : currentPlan === 'starter' ? 'Starter · $19/mo' : currentPlan === 'business' ? 'Business · $49/mo' : 'Pro · $99/mo'}</p>
+                      <p className="text-xs text-slate-500">{currentPlan === 'free_trial' ? `${trialDaysLeft} days left` : 'Renews monthly'}</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setTab('billing')} className="text-xs text-indigo-600 font-semibold hover:text-indigo-800">Manage plan →</button>
+                </div>
+                {currentPlan === 'free_trial' && (
+                  <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-center justify-between gap-3">
+                    <p className="text-xs text-amber-700 font-medium">Trial ends in {trialDaysLeft} days. Upgrade to keep everything.</p>
+                    <button onClick={() => setTab('billing')} className="text-xs bg-amber-500 text-white font-bold px-3 py-1.5 rounded-lg hover:bg-amber-600 transition-colors shrink-0">Upgrade →</button>
+                  </div>
+                )}
+              </div>
+
+              {/* Password */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                <h3 className="font-bold text-slate-800 mb-1 flex items-center gap-2"><Shield size={16} /> Password & Security</h3>
+                <p className="text-sm text-slate-500 mb-4">Change your password or set up two-factor authentication.</p>
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={async () => {
+                      if (supabase && user?.email) {
+                        await supabase.auth.resetPasswordForEmail(user.email);
+                        alert('Password reset email sent to ' + user.email);
+                      }
+                    }}
+                    className="px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800"
+                  >
+                    Send password reset email
+                  </button>
+                  <a href="https://supabase.com/docs/guides/auth/auth-mfa" target="_blank" rel="noopener noreferrer" className="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl text-sm font-semibold hover:bg-slate-50">
+                    Enable 2FA
+                  </a>
+                </div>
+              </div>
+
+              {/* Notifications */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                <h3 className="font-bold text-slate-800 mb-1 flex items-center gap-2"><span>🔔</span> Notifications</h3>
+                <p className="text-sm text-slate-500 mb-4">Choose what you&apos;re notified about.</p>
+                <div className="space-y-3">
+                  {[
+                    { label: 'New lead from website', desc: 'Get notified when someone fills your contact form', key: 'notif_new_lead', default: true },
+                    { label: 'Lead stage change', desc: 'When a lead moves to a new stage in your pipeline', key: 'notif_stage', default: false },
+                    { label: 'New support ticket', desc: 'When a customer submits a support request', key: 'notif_ticket', default: true },
+                    { label: 'Weekly summary', desc: 'Weekly digest of your pipeline, leads, and revenue', key: 'notif_weekly', default: true },
+                  ].map(n => (
+                    <div key={n.key} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-800">{n.label}</p>
+                        <p className="text-xs text-slate-400">{n.desc}</p>
+                      </div>
+                      <div className={`relative w-10 h-5 rounded-full transition-colors ${n.default ? 'bg-emerald-500' : 'bg-slate-300'} cursor-pointer`}>
+                        <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${n.default ? 'translate-x-5' : ''}`} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Danger zone — hidden behind a reveal */}
+              <div className="border border-red-200 rounded-2xl overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setShowDangerZone(v => !v)}
+                  className="w-full flex items-center justify-between px-6 py-4 bg-red-50 hover:bg-red-100 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <span>⚠️</span>
+                    <p className="font-bold text-red-800 text-sm">Danger Zone</p>
+                    <span className="text-[10px] text-red-500 bg-red-100 border border-red-200 px-2 py-0.5 rounded-full font-semibold">Irreversible actions</span>
+                  </div>
+                  <span className="text-red-400 text-xs font-semibold">{showDangerZone ? 'Hide ↑' : 'Show ↓'}</span>
+                </button>
+                {showDangerZone && (
+                  <div className="bg-white p-6 space-y-5">
+                    <p className="text-sm text-slate-500">To confirm any action below, type <span className="font-mono font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">DELETE</span> in the box first.</p>
+                    <input
+                      type="text"
+                      value={dangerZoneConfirm}
+                      onChange={e => setDangerZoneConfirm(e.target.value)}
+                      placeholder="Type DELETE to unlock actions"
+                      className="w-full p-3 border-2 border-red-200 rounded-xl text-sm focus:outline-none focus:border-red-400 font-mono"
+                    />
+                    <div className="space-y-3 opacity-0 transition-opacity" style={{ opacity: dangerZoneConfirm === 'DELETE' ? 1 : 0.3, pointerEvents: dangerZoneConfirm === 'DELETE' ? 'auto' : 'none' }}>
+                      <div className="flex items-center justify-between p-4 bg-red-50 rounded-xl border border-red-200">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-800">Delete all leads</p>
+                          <p className="text-xs text-slate-500">Permanently removes all {leads.length} leads and pipeline data</p>
+                        </div>
+                        <button
+                          className="text-xs px-3 py-2 border border-red-400 text-red-700 rounded-lg font-bold hover:bg-red-100 disabled:opacity-40"
+                          disabled={dangerZoneConfirm !== 'DELETE'}
+                          onClick={() => { if (supabase && org) { supabase.from('leads').delete().eq('org_id', org.id).then(() => { setLeads([]); setDangerZoneConfirm(''); setShowDangerZone(false); }); } }}
+                        >
+                          Delete {leads.length} leads
+                        </button>
+                      </div>
+                      <div className="flex items-center justify-between p-4 bg-red-50 rounded-xl border border-red-200">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-800">Delete account</p>
+                          <p className="text-xs text-slate-500">Permanently deletes your account and all data. Cannot be undone.</p>
+                        </div>
+                        <button
+                          className="text-xs px-3 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 disabled:opacity-40"
+                          disabled={dangerZoneConfirm !== 'DELETE'}
+                          onClick={() => alert('To delete your account, email support@stoklync.com with subject: "Delete my account"')}
+                        >
+                          Delete account
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
