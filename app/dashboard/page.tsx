@@ -1349,7 +1349,7 @@ export default function DashboardPage() {
                               <td className="px-4 py-3 font-mono text-xs">{o.id.slice(0, 8)}…</td>
                               <td className="px-4 py-3 font-medium">${o.total.toFixed(2)}</td>
                               <td className="px-4 py-3"><span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-xs">{o.status}</span></td>
-                              <td className="px-4 py-3 text-slate-600">{o.created_at ? new Date(o.created_at).toLocaleDateString() : '—'}</td>
+                              <td className="px-4 py-3 text-slate-600">{o.created_at ? new Date(o.created_at).toLocaleDateString() : '-'}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -1407,10 +1407,10 @@ export default function DashboardPage() {
                         {crmFilteredLeads.map(l => (
                           <tr key={l.id} className="border-b border-slate-100 hover:bg-slate-50">
                             <td className="px-4 py-3"><button onClick={() => { setSelectedLead(l); setLeadNextAction(l.next_action || ''); }} className="font-medium text-slate-900 hover:underline">{l.name}</button></td>
-                            <td className="px-4 py-3 text-slate-600">{l.company || '—'}</td>
+                            <td className="px-4 py-3 text-slate-600">{l.company || '-'}</td>
                             <td className="px-4 py-3"><a href={`mailto:${l.email}`} className="text-blue-600 hover:underline">{l.email}</a></td>
                             <td className="px-4 py-3"><span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-xs">{l.stage || 'NEW'}</span></td>
-                            <td className="px-4 py-3"><span className="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs">{l.source || '—'}</span></td>
+                            <td className="px-4 py-3"><span className="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs">{l.source || '-'}</span></td>
                             <td className="px-4 py-3">
                               <div className="flex gap-1">
                                 {l.email && <a href={`mailto:${l.email}`} className="p-1.5 rounded hover:bg-blue-100 text-blue-600" title="Email"><Mail size={14} /></a>}
@@ -1473,10 +1473,10 @@ export default function DashboardPage() {
                       <button onClick={() => setSelectedLead(null)} className="p-1 rounded hover:bg-slate-100"><X size={18} /></button>
                     </div>
                     <div className="space-y-3 text-sm">
-                      <p><span className="text-slate-500">Company</span> {selectedLead.company || '—'}</p>
+                      <p><span className="text-slate-500">Company</span> {selectedLead.company || '-'}</p>
                       <p><span className="text-slate-500">Email</span> <a href={`mailto:${selectedLead.email}`} className="text-blue-600 hover:underline">{selectedLead.email}</a></p>
-                      <p><span className="text-slate-500">Phone</span> {selectedLead.phone ? <a href={`tel:${selectedLead.phone}`} className="text-blue-600 hover:underline">{selectedLead.phone}</a> : '—'}</p>
-                      <p><span className="text-slate-500">Stage</span> {selectedLead.stage} · Source: {selectedLead.source || '—'}</p>
+                      <p><span className="text-slate-500">Phone</span> {selectedLead.phone ? <a href={`tel:${selectedLead.phone}`} className="text-blue-600 hover:underline">{selectedLead.phone}</a> : '-'}</p>
+                      <p><span className="text-slate-500">Stage</span> {selectedLead.stage} · Source: {selectedLead.source || '-'}</p>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-4">
                       {selectedLead.email && <a href={`mailto:${selectedLead.email}`} className="px-3 py-2 rounded-lg bg-blue-100 text-blue-700 flex items-center gap-2 text-sm font-medium hover:bg-blue-200"><Mail size={16} /> Email</a>}
@@ -1563,7 +1563,7 @@ export default function DashboardPage() {
                 <div className="space-y-4">
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
                     <p className="font-medium text-slate-800 text-sm">1. Your website</p>
-                    <p className="text-slate-600 text-sm mt-1">Your contact form captures leads. Run Facebook or Google ads to your site URL—leads land in CRM.</p>
+                    <p className="text-slate-600 text-sm mt-1">Your contact form captures leads. Run Facebook or Google ads to your site URL - leads land in CRM.</p>
                     {org && (
                       <div className="mt-2 flex gap-2">
                         <code className="flex-1 p-2 bg-white rounded border border-slate-200 text-xs font-mono break-all">
@@ -1575,7 +1575,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
                     <p className="font-medium text-slate-800 text-sm">2. Webhook for Zapier / Facebook Lead Ads</p>
-                    <p className="text-slate-600 text-sm mt-1">Connect Facebook Lead Ads or any tool via webhook—POST leads to this URL:</p>
+                    <p className="text-slate-600 text-sm mt-1">Connect Facebook Lead Ads or any tool via webhook - POST leads to this URL:</p>
                     <div className="mt-2 flex gap-2">
                       <code className="flex-1 p-2 bg-white rounded border border-slate-200 text-xs font-mono break-all">
                         {typeof window !== 'undefined' ? `${window.location.origin}/api/submit-contact` : '/api/submit-contact'}
