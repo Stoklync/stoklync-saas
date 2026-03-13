@@ -48,11 +48,10 @@ export default function SignInPage() {
     setGoogleLoading(true);
     setError('');
     try {
-      const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '')).replace(/\/$/, '');
       const { error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${baseUrl || window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/dashboard`,
           queryParams: { access_type: 'offline', prompt: 'consent' },
         },
       });
@@ -72,7 +71,7 @@ export default function SignInPage() {
     try {
       const { error: magicError } = await supabase.auth.signInWithOtp({
         email: email.trim(),
-        options: { emailRedirectTo: `${(process.env.NEXT_PUBLIC_APP_URL || window.location.origin).replace(/\/$/, '')}/auth/callback` },
+        options: { emailRedirectTo: `${window.location.origin}/dashboard` },
       });
       if (magicError) throw magicError;
       setMessage('Check your email. We sent a magic sign-in link!');
