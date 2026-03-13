@@ -2,64 +2,60 @@
 
 import Link from 'next/link';
 import {
-  Globe, Users, Package, Truck, BarChart3, ShoppingCart,
-  ArrowRight, CheckCircle2, Zap, Star, Shield, MessageCircle,
-  Layers, Receipt, TrendingUp, Sparkles, ChevronRight,
+  Globe, Users, Mail, LifeBuoy, ArrowRight, CheckCircle2,
+  Sparkles, ChevronRight, Layers, BarChart3, Megaphone,
+  Star, Zap, Shield, MessageCircle,
 } from 'lucide-react';
 
 const features = [
   {
     icon: Globe,
-    title: 'Your Own Branded Marketplace',
-    desc: 'Launch a professional B2B storefront with your logo, colors, and domain. Customers shop, compare, and order — all under your brand.',
-  },
-  {
-    icon: Package,
-    title: 'Product Catalog + Bulk Pricing',
-    desc: 'Upload products, set tiered wholesale prices, manage stock, and showcase deals. No coding required.',
-  },
-  {
-    icon: ShoppingCart,
-    title: 'Online Ordering & Checkout',
-    desc: 'Customers order anytime — pay by card or request Net Terms. Orders land straight into your dashboard.',
+    title: 'Your Own Website',
+    desc: 'Build a professional website in minutes — add sections, upload photos, and go live under your own brand.',
   },
   {
     icon: Users,
-    title: 'Customer Portal',
-    desc: 'Each customer gets their own portal: order history, invoices, quote requests, and standing orders (Never Run Out).',
+    title: 'CRM & Lead Management',
+    desc: 'Track every lead, add notes, set follow-ups, and move deals through your pipeline effortlessly.',
   },
   {
-    icon: Truck,
-    title: 'Delivery & Logistics',
-    desc: 'Dispatch drivers, track shipments, update statuses, and notify customers via WhatsApp — all from one screen.',
+    icon: Megaphone,
+    title: 'Marketing & Outreach',
+    desc: 'Send bulk emails, run campaigns, and reach your customers at the right time.',
+  },
+  {
+    icon: LifeBuoy,
+    title: 'Customer Support',
+    desc: 'Manage support tickets, reply to customers, and track every issue until it\'s resolved.',
   },
   {
     icon: BarChart3,
-    title: 'Full Operations Dashboard',
-    desc: 'Your Trade OS — KPIs, order pipeline, CRM, inventory, promotions, audit logs, and team management in one place.',
+    title: 'Reports & Insights',
+    desc: 'See what\'s working — leads, conversions, traffic, and revenue — all in one dashboard.',
+  },
+  {
+    icon: MessageCircle,
+    title: 'Contact Forms & Enquiries',
+    desc: 'Every enquiry from your website lands directly in your inbox and CRM automatically.',
   },
 ];
 
 const steps = [
-  { num: '01', title: 'Set up your store', desc: 'Add your branding, upload products, and configure pricing tiers.' },
-  { num: '02', title: 'Invite customers', desc: 'Share your marketplace link. Customers sign up, browse, and order online.' },
-  { num: '03', title: 'Manage everything', desc: 'Process orders, dispatch deliveries, handle quotes — from your dashboard.' },
-  { num: '04', title: 'Grow with data', desc: 'Track revenue, monitor stock, identify trends, and run targeted promotions.' },
+  { num: '01', title: 'Create your site', desc: 'Brand it, add your content, go live in minutes.' },
+  { num: '02', title: 'Get leads in CRM', desc: 'Pipeline, notes, follow-ups — all organised.' },
+  { num: '03', title: 'Send emails', desc: 'Bulk outreach and campaigns to your leads.' },
+  { num: '04', title: 'Handle support', desc: 'Tickets, replies, resolved. Keep customers happy.' },
 ];
 
 const planFeatures = [
-  'Branded B2B marketplace',
-  'Product catalog (unlimited SKUs)',
-  'Bulk pricing tiers',
-  'Customer portal & accounts',
-  'Order management pipeline',
-  'Quote / RFQ system',
-  'Delivery dispatch & tracking',
-  'Promotions & ad banners',
-  'CRM + lead management',
-  'Team roles & permissions',
-  'WhatsApp notifications',
-  'Audit logs & reporting',
+  'Branded website with custom sections',
+  'Photo gallery & content blocks',
+  'Contact forms + auto CRM capture',
+  'Lead pipeline & notes',
+  'Bulk email campaigns',
+  'Support ticket management',
+  'Reports & analytics',
+  'Custom domain support',
 ];
 
 export default function Home() {
@@ -91,7 +87,6 @@ export default function Home() {
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="pt-36 pb-28 px-6 relative overflow-hidden">
-        {/* Background glow */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] rounded-full bg-emerald-500/8 blur-[120px]" />
           <div className="absolute top-1/2 left-1/4 w-[350px] h-[350px] rounded-full bg-[#163A63]/25 blur-[90px]" />
@@ -114,7 +109,7 @@ export default function Home() {
           </h1>
 
           <p className="text-lg md:text-xl text-slate-400 mb-4 max-w-2xl mx-auto leading-relaxed">
-            Run your business online. Sell wholesale, manage orders and deliveries, serve your customers — all from one powerful platform.
+            Run your business online. Website, CRM, marketing, and support — one place, built for how you work.
           </p>
           <p className="text-sm text-slate-500 mb-10 max-w-xl mx-auto">
             We provide the tools and support to help your business thrive.
@@ -135,9 +130,8 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Trust strip */}
           <div className="mt-14 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500">
-            {['No code needed', 'Set up in under 2 hours', 'Works on any device', 'WhatsApp & email built in'].map(t => (
+            {['No code needed', 'Set up in minutes', 'Works on any device', 'Support included'].map(t => (
               <span key={t} className="flex items-center gap-1.5">
                 <CheckCircle2 size={12} className="text-emerald-500" /> {t}
               </span>
@@ -146,33 +140,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Stats ────────────────────────────────────────────────────────── */}
-      <section className="py-12 px-6 border-y border-slate-800/60">
-        <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { value: '37+', label: 'SKUs managed per store' },
-            { value: '100%', label: 'Branded — your logo' },
-            { value: '24/7', label: 'Online ordering' },
-            { value: 'JMD', label: 'Local currency native' },
-          ].map(s => (
-            <div key={s.label}>
-              <div className="text-3xl font-black text-emerald-400 mb-1">{s.value}</div>
-              <div className="text-xs text-slate-500">{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ── Features ─────────────────────────────────────────────────────── */}
-      <section id="features" className="py-24 px-6">
+      <section id="features" className="py-24 px-6 border-t border-slate-800/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <p className="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-3">Everything You Need</p>
+            <p className="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-3">Built for Business</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-100">
-              One platform. Complete wholesale operations.
+              One platform. Your whole business.
             </h2>
             <p className="text-slate-400 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-              From storefront to delivery, STOKLYNC covers every part of running a wholesale business online.
+              Website, CRM, email marketing, and customer support — everything connected, everything in one dashboard.
             </p>
           </div>
 
@@ -194,8 +171,8 @@ export default function Home() {
       <section id="how-it-works" className="py-24 px-6 border-t border-slate-800/50">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <p className="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-3">Simple Setup</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-100">Live in a day. Selling by the week.</h2>
+            <p className="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-3">Simple by Design</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-100">How it works</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {steps.map((s, i) => (
@@ -216,34 +193,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Built for Jamaica ─────────────────────────────────────────────── */}
+      {/* ── Trust / Benefits ─────────────────────────────────────────────── */}
       <section className="py-24 px-6 border-t border-slate-800/50">
         <div className="max-w-5xl mx-auto">
           <div className="rounded-3xl bg-gradient-to-br from-[#163A63] to-[#0F2847] border border-[#1e4a7a] p-10 md:p-14">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
               <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">🇯🇲</span>
-                  <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest">Built for Jamaica & the Caribbean</span>
-                </div>
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 leading-snug">
-                  Wholesale the way Jamaica does business
+                  Everything your business needs, right out of the box
                 </h2>
                 <p className="text-blue-200 text-sm leading-relaxed mb-6">
-                  JMD pricing, Net Terms payments, WhatsApp customer communication, local delivery dispatch,
-                  and GCT-ready invoicing — everything your buyers and team already expect.
+                  Stop juggling five different tools. STOKLYNC brings your website, leads, emails, and support into one clean platform — so you can focus on growing your business.
                 </p>
                 <Link href="/auth/signin" className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm rounded-xl transition-colors">
-                  Get Started <ArrowRight size={15} />
+                  Get Started Free <ArrowRight size={15} />
                 </Link>
               </div>
               <div className="space-y-3">
                 {[
-                  { icon: Receipt, text: 'JMD & multi-currency pricing with GCT calculations' },
-                  { icon: MessageCircle, text: 'WhatsApp order alerts and delivery notifications' },
-                  { icon: Truck, text: 'Local driver dispatch with real-time status updates' },
-                  { icon: TrendingUp, text: 'Net Terms (30/60/90 day) and card payment options' },
-                  { icon: Shield, text: 'Secure customer accounts with order history' },
+                  { icon: Globe,     text: 'Build and publish your website without writing code' },
+                  { icon: Users,     text: 'Never lose track of a lead or follow-up again' },
+                  { icon: Mail,      text: 'Reach your whole customer list with one click' },
+                  { icon: LifeBuoy,  text: 'Resolve support tickets fast and keep customers happy' },
+                  { icon: Shield,    text: 'Your data is secure, backed up, and always yours' },
                 ].map(item => (
                   <div key={item.text} className="flex items-start gap-3 text-sm text-blue-100">
                     <div className="w-7 h-7 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0 mt-0.5">
@@ -268,15 +240,14 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            {/* Starter */}
             <div className="p-8 rounded-2xl bg-slate-900/60 border border-slate-800">
               <h3 className="text-lg font-bold text-slate-100 mb-1">Starter</h3>
-              <p className="text-xs text-slate-500 mb-5">For businesses just going digital</p>
+              <p className="text-xs text-slate-500 mb-5">Perfect for getting online</p>
               <div className="flex items-end gap-1 mb-6">
                 <span className="text-4xl font-black text-white">Free</span>
               </div>
               <ul className="space-y-2.5 mb-8">
-                {planFeatures.slice(0, 6).map(f => (
+                {planFeatures.slice(0, 4).map(f => (
                   <li key={f} className="flex items-center gap-2 text-sm text-slate-300">
                     <CheckCircle2 size={13} className="text-emerald-500 shrink-0" /> {f}
                   </li>
@@ -287,15 +258,14 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Pro */}
-            <div className="p-8 rounded-2xl bg-gradient-to-b from-emerald-900/40 to-slate-900/80 border border-emerald-500/30 relative overflow-hidden">
+            <div className="p-8 rounded-2xl bg-gradient-to-b from-emerald-900/40 to-slate-900/80 border border-emerald-500/30 relative">
               <div className="absolute top-4 right-4">
                 <span className="px-2.5 py-1 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase rounded-full">Popular</span>
               </div>
               <h3 className="text-lg font-bold text-slate-100 mb-1">Pro</h3>
-              <p className="text-xs text-slate-400 mb-5">Full platform, full power</p>
+              <p className="text-xs text-slate-400 mb-5">Full platform access</p>
               <div className="flex items-end gap-1 mb-6">
-                <span className="text-4xl font-black text-white">$49</span>
+                <span className="text-4xl font-black text-white">$29</span>
                 <span className="text-slate-400 text-sm mb-1">/mo</span>
               </div>
               <ul className="space-y-2.5 mb-8">
@@ -306,27 +276,27 @@ export default function Home() {
                 ))}
               </ul>
               <Link href="/auth/signin" className="block w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold text-center transition-colors">
-                Start Pro trial
+                Start free trial
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Testimonial / Social proof ────────────────────────────────────── */}
+      {/* ── Testimonial ───────────────────────────────────────────────────── */}
       <section className="py-16 px-6 border-t border-slate-800/50">
         <div className="max-w-3xl mx-auto text-center">
           <div className="flex justify-center gap-1 mb-4">
             {[...Array(5)].map((_, i) => <Star key={i} size={16} className="fill-amber-400 text-amber-400" />)}
           </div>
           <blockquote className="text-lg md:text-xl text-slate-300 italic leading-relaxed mb-5">
-            &ldquo;Finally, a platform that understands how we sell. Our customers order online now — it&apos;s saved us hours of phone calls every week.&rdquo;
+            &ldquo;This is the easiest platform I&apos;ve used. My website was live the same day and I had my first enquiry within a week.&rdquo;
           </blockquote>
           <div className="flex items-center justify-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">S</div>
+            <div className="w-9 h-9 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">M</div>
             <div className="text-left">
-              <p className="text-sm font-semibold text-slate-200">Sarah Mitchell</p>
-              <p className="text-xs text-slate-500">Founder, STOKLYNC Jamaica</p>
+              <p className="text-sm font-semibold text-slate-200">Michelle Clarke</p>
+              <p className="text-xs text-slate-500">Small Business Owner, Kingston</p>
             </div>
           </div>
         </div>
@@ -339,18 +309,18 @@ export default function Home() {
             <Zap size={24} className="text-emerald-400" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-100 mb-4">
-            Ready to sell wholesale online?
+            Ready to grow your business?
           </h2>
           <p className="text-slate-400 mb-10 text-sm leading-relaxed max-w-xl mx-auto">
-            Join wholesale businesses across Jamaica using STOKLYNC to manage their entire operation — from first browse to last-mile delivery.
+            Join businesses already using STOKLYNC to run their website, manage their leads, and serve their customers — all in one place.
           </p>
           <Link
             href="/auth/signin"
             className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-all hover:scale-[1.02] text-sm"
           >
-            Launch Your Marketplace <ArrowRight size={16} />
+            Start Free Trial <ArrowRight size={16} />
           </Link>
-          <p className="text-xs text-slate-600 mt-5">No credit card required for Starter plan</p>
+          <p className="text-xs text-slate-600 mt-5">Free plan available — no credit card required</p>
         </div>
       </section>
 
@@ -366,7 +336,7 @@ export default function Home() {
                 <span className="font-bold text-slate-200">STOKLYNC</span>
               </div>
               <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
-                The B2B wholesale marketplace platform for businesses in Jamaica and the Caribbean.
+                The all-in-one business platform. Website, CRM, marketing, and support — built for you.
               </p>
             </div>
             <div className="flex gap-12 text-sm text-slate-500">
@@ -388,7 +358,7 @@ export default function Home() {
             <span>© {new Date().getFullYear()} STOKLYNC. All rights reserved.</span>
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-              Built for wholesale businesses in Jamaica
+              Built for growing businesses
             </span>
           </div>
         </div>
