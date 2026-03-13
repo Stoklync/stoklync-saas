@@ -149,6 +149,18 @@ export default function SitePage() {
         if (d.customHtml) setCustomHtml(d.customHtml);
         if (d.branding || d.cms) setData(d);
         setLoading(false);
+        // Track page view (fire and forget — never blocks rendering)
+        try {
+          fetch('/api/track-view', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              org_id: orgId,
+              path: window.location.pathname,
+              referrer: document.referrer || null,
+            }),
+          }).catch(() => {});
+        } catch { /* silent */ }
       })
       .catch(() => setLoading(false));
   }, [orgId]);

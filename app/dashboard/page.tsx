@@ -12,6 +12,7 @@ import {
   LayoutDashboard, LogOut, Loader2, Globe, Users, Megaphone, LifeBuoy,
   Settings, UserPlus, CreditCard, ExternalLink, Mail, Phone, Plus, Trash2, MessageCircle, X,
   Sparkles, ShoppingBag, Clock, PenTool, Layout, Send, Shield, ArrowRight, ImagePlus,
+  BarChart3, TrendingUp, Target, Zap, CheckCircle,
 } from 'lucide-react';
 
 const WEBSITE_TEMPLATES = {
@@ -121,7 +122,7 @@ const WEBSITE_TEMPLATES = {
   },
 };
 
-type Tab = 'home' | 'website' | 'crm' | 'marketing' | 'support' | 'team' | 'settings' | 'billing' | 'account';
+type Tab = 'home' | 'website' | 'crm' | 'analytics' | 'marketing' | 'support' | 'team' | 'settings' | 'billing' | 'account';
 type WebsiteSubTab = 'preview' | 'branding' | 'contact' | 'cms' | 'visual';
 type CrmSubTab = 'pipeline' | 'contacts';
 type CrmViewType = 'consulting' | 'deals' | 'product' | 'services';
@@ -395,13 +396,22 @@ function BentoHome({ userName, orgName, leadCount, topLeads, leads, serviceHours
             <button onClick={() => onNavigate('crm')} className="text-xs text-slate-500 font-semibold hover:text-slate-900 flex items-center gap-1 transition-colors">View pipeline <ArrowRight size={11} /></button>
           </div>
           {leads.length === 0 ? (
-            <div className="text-center py-10">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
-                <ArrowRight size={20} className="text-slate-400" />
-              </div>
-              <p className="text-sm font-semibold text-slate-700">No leads yet</p>
-              <p className="text-xs text-slate-400 mt-1 max-w-[220px] mx-auto">Share your website link and leads will appear here automatically</p>
-              <button onClick={() => onNavigate('website')} className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 text-white text-xs font-semibold rounded-xl transition-colors" style={{ background: '#163A63' }}>Set up website →</button>
+            <div className="py-6 space-y-3">
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Get started — 3 steps to your first lead</p>
+              {[
+                { step: '1', title: 'Set up your website', desc: 'Pick a template, add your details, publish. Takes 5 minutes.', tab: 'website' as Tab, cta: 'Open Website Builder', done: false },
+                { step: '2', title: 'Share your site link', desc: 'Post it on social, add to bio, run an ad. Leads auto-capture to CRM.', tab: 'marketing' as Tab, cta: 'See Marketing Tools', done: false },
+                { step: '3', title: 'Close deals in CRM', desc: 'Follow up, send proposals, track every lead through your pipeline.', tab: 'crm' as Tab, cta: 'Open CRM', done: false },
+              ].map(s => (
+                <button key={s.step} onClick={() => onNavigate(s.tab)} className="w-full text-left flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-all group">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black text-white shrink-0" style={{ background: '#163A63' }}>{s.step}</div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-slate-800 text-sm">{s.title}</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{s.desc}</p>
+                  </div>
+                  <span className="text-xs font-bold text-blue-600 group-hover:text-blue-800 shrink-0 flex items-center gap-1">{s.cta} <ArrowRight size={10}/></span>
+                </button>
+              ))}
             </div>
           ) : (
             <div className="space-y-1">
@@ -491,7 +501,7 @@ export default function DashboardPage() {
   const [onboarding, setOnboarding] = useState(false);
   const [user, setUser] = useState<{ id: string; email?: string; user_metadata?: { name?: string; company?: string } } | null>(null);
   const [org, setOrg] = useState<{ id: string; name: string } | null>(null);
-  const [tab, setTab] = useState<Tab>('website');
+  const [tab, setTab] = useState<Tab>('home');
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteLoading, setInviteLoading] = useState(false);
   const [members, setMembers] = useState<OrgMember[]>([]);
@@ -547,6 +557,8 @@ export default function DashboardPage() {
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [dangerZoneConfirm, setDangerZoneConfirm] = useState('');
   const [showDangerZone, setShowDangerZone] = useState(false);
+  const [pageViews, setPageViews] = useState<{ path: string; referrer: string|null; country: string|null; created_at: string }[]>([]);
+  const [emailEvents, setEmailEvents] = useState<{ email_id: string; event_type: string; recipient: string|null; subject: string|null; created_at: string }[]>([]);
 
   useEffect(() => {
     const client = supabase;
@@ -614,13 +626,15 @@ export default function DashboardPage() {
       const { data: m } = await client.from('team_members').select('id, name, email, role').eq('org_id', orgId).order('created_at');
       setMembers(m || []);
 
-      const [leadsRes, ticketsRes, brandRes, cmsRes, projectsSettled, ordersSettled] = await Promise.all([
+      const [leadsRes, ticketsRes, brandRes, cmsRes, projectsSettled, ordersSettled, pageViewsSettled, emailEventsSettled] = await Promise.all([
         client.from('leads').select('id, name, email, company, phone, stage, source, next_action, created_at').eq('org_id', orgId).order('created_at', { ascending: false }).limit(200),
         client.from('tickets').select('id, subject, customer, contact_email, message, status, priority, assignee, source, created_at').eq('org_id', orgId).order('created_at', { ascending: false }).limit(200),
         client.from('branding').select('*').eq('org_id', orgId).maybeSingle(),
         client.from('website_cms').select('*').eq('org_id', orgId).maybeSingle(),
         (async () => { try { const r = await client.from('service_projects').select('id, name, status, credits_total, lead_id').eq('org_id', orgId).order('created_at', { ascending: false }).limit(100); return r.data || []; } catch { return []; } })(),
         (async () => { try { const r = await client.from('orders').select('id, total, status, created_at').eq('org_id', orgId).order('created_at', { ascending: false }).limit(200); return r.data || []; } catch { return []; } })(),
+        (async () => { try { const r = await client.from('page_views').select('path, referrer, country, created_at').eq('org_id', orgId).order('created_at', { ascending: false }).limit(500); return r.data || []; } catch { return []; } })(),
+        (async () => { try { const r = await client.from('email_events').select('email_id, event_type, recipient, subject, created_at').eq('org_id', orgId).order('created_at', { ascending: false }).limit(500); return r.data || []; } catch { return []; } })(),
       ]);
       const l = leadsRes.data || [];
       setLeads(l.map((x: Record<string, unknown>) => ({
@@ -670,6 +684,17 @@ export default function DashboardPage() {
       setOrders(ords.map((o: Record<string, unknown>) => ({
         id: String(o.id), total: Number(o.total || 0), status: String(o.status || ''),
         created_at: String(o.created_at || ''),
+      })));
+      const pvs = Array.isArray(pageViewsSettled) ? pageViewsSettled : [];
+      setPageViews(pvs.map((p: Record<string, unknown>) => ({
+        path: String(p.path || '/'), referrer: p.referrer ? String(p.referrer) : null,
+        country: p.country ? String(p.country) : null, created_at: String(p.created_at || ''),
+      })));
+      const evs = Array.isArray(emailEventsSettled) ? emailEventsSettled : [];
+      setEmailEvents(evs.map((e: Record<string, unknown>) => ({
+        email_id: String(e.email_id || ''), event_type: String(e.event_type || ''),
+        recipient: e.recipient ? String(e.recipient) : null, subject: e.subject ? String(e.subject) : null,
+        created_at: String(e.created_at || ''),
       })));
 
       const c = cmsRes.data;
@@ -1044,6 +1069,9 @@ export default function DashboardPage() {
     router.replace('/');
   };
 
+  const MARKETPLACE_ORG_ID = process.env.NEXT_PUBLIC_MARKETPLACE_ORG_ID || 'ORG-8821X';
+  const isMarketplaceOrg = org?.id === MARKETPLACE_ORG_ID;
+
   if (loading || onboarding) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-100">
@@ -1055,9 +1083,29 @@ export default function DashboardPage() {
     );
   }
 
+  if (isMarketplaceOrg) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-100 p-6">
+        <div className="max-w-lg text-center bg-amber-50 border border-amber-200 rounded-xl p-8">
+          <h2 className="text-lg font-bold text-amber-900 mb-3">Wrong organization</h2>
+          <p className="text-amber-800 text-sm leading-relaxed mb-4">
+            You&apos;re signed into the Stoklync <strong>marketplace</strong> org. The website builder here is for consultant and small business brands — it uses the same branding database as the marketplace, so editing here would change the marketplace logo and branding.
+          </p>
+          <p className="text-amber-800 text-sm leading-relaxed mb-6">
+            To use the website builder without affecting the marketplace, create a new organization (e.g. your consultant business) with a different account, or use the Trade OS at stoklync.com for marketplace branding.
+          </p>
+          <button onClick={handleSignOut} className="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700">
+            Sign out
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const navItems: { id: Tab; label: string; icon: typeof LayoutDashboard; permission?: keyof Permissions }[] = [
-    { id: 'website', label: 'Website', icon: Globe },
     { id: 'home', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'website', label: 'Website', icon: Globe },
     { id: 'crm', label: 'CRM', icon: Users },
     { id: 'marketing', label: 'Marketing', icon: Megaphone },
     { id: 'support', label: 'Support', icon: LifeBuoy },
@@ -1127,6 +1175,446 @@ export default function DashboardPage() {
                 onAiInsightsClose={() => setShowAiInsightsModal(false)}
                 orgId={org?.id}
               />
+            );
+          })()}
+          {tab === 'analytics' && (() => {
+            // Analytics calculations
+            const now = new Date();
+            const days30 = Array.from({ length: 30 }, (_, i) => {
+              const d = new Date(now); d.setDate(d.getDate() - (29 - i));
+              return d.toISOString().slice(0, 10);
+            });
+            const leadsPerDay = days30.map(day => leads.filter(l => l.created_at?.slice(0, 10) === day).length);
+            const maxLeads = Math.max(...leadsPerDay, 1);
+            const paidOrders = orders.filter(o => ['PAID','FULFILLED','CONFIRMED','DELIVERED','PROCESSING'].includes((o.status||'').toUpperCase()));
+            const totalRevenue = paidOrders.reduce((s,o) => s+o.total, 0);
+            const wonLeads = leads.filter(l => (l.stage||'').toUpperCase() === 'WON');
+            const winRate = leads.length > 0 ? Math.round((wonLeads.length / leads.length) * 100) : 0;
+            const avgDealSize = wonLeads.length > 0 ? totalRevenue / wonLeads.length : 0;
+            // Stage funnel
+            const stageOrder = ['NEW','QUALIFIED','DISCOVERY','PROPOSAL','STRATEGY_SESSION','NEGOTIATION','CONTRACT_SIGNED','WON'];
+            const stageCounts = stageOrder.map(s => ({ stage: s, count: leads.filter(l => (l.stage||'NEW').toUpperCase() === s).length })).filter(s => s.count > 0);
+            const maxStageCount = Math.max(...stageCounts.map(s => s.count), 1);
+            // Source breakdown
+            const sourceCounts = leads.reduce((acc, l) => { const s = (l.source||'WEBSITE').toUpperCase(); acc[s] = (acc[s]||0)+1; return acc; }, {} as Record<string,number>);
+            const srcEntries = Object.entries(sourceCounts).sort((a,b) => b[1]-a[1]);
+            const srcEmoji: Record<string,string> = { WEBSITE:'🌐', FACEBOOK_AD:'📘', GOOGLE_AD:'🔍', INSTAGRAM:'📸', MANUAL:'✍️', REFERRAL:'🤝', WHATSAPP:'💬' };
+            // Last 7 days leads
+            const last7 = Array.from({length:7},(_,i)=>{ const d=new Date(now); d.setDate(d.getDate()-(6-i)); return { label:['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()], count: leads.filter(l=>l.created_at?.slice(0,10)===d.toISOString().slice(0,10)).length }; });
+            const maxDay = Math.max(...last7.map(d=>d.count), 1);
+            // Email engagement (approximated from marketing sends)
+            const ticketsClosed = tickets.filter((t:{status:string}) => t.status === 'RESOLVED').length;
+            const responseRate = tickets.length > 0 ? Math.round((ticketsClosed / tickets.length) * 100) : 100;
+            return (
+              <div className="max-w-5xl space-y-6">
+                <div>
+                  <h2 className="text-xl font-bold text-slate-900">Analytics</h2>
+                  <p className="text-sm text-slate-500 mt-0.5">Your business performance at a glance.</p>
+                </div>
+                {/* KPI Row */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { icon: Users, label: 'Total Leads', value: leads.length, sub: `${leads.filter(l=>l.created_at?.slice(0,10)===now.toISOString().slice(0,10)).length} today`, color: '#163A63' },
+                    { icon: Target, label: 'Win Rate', value: `${winRate}%`, sub: `${wonLeads.length} deals won`, color: '#2F8F5B' },
+                    { icon: TrendingUp, label: 'Total Revenue', value: `$${totalRevenue.toLocaleString()}`, sub: `${paidOrders.length} orders`, color: '#7C3AED' },
+                    { icon: Zap, label: 'Avg Deal Size', value: avgDealSize > 0 ? `$${Math.round(avgDealSize).toLocaleString()}` : '$0', sub: 'from won deals', color: '#D97706' },
+                  ].map(kpi => {
+                    const Icon = kpi.icon;
+                    return (
+                      <div key={kpi.label} className="bg-white rounded-xl border border-slate-200 p-5">
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{kpi.label}</p>
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: kpi.color + '15' }}>
+                            <Icon size={16} style={{ color: kpi.color }} />
+                          </div>
+                        </div>
+                        <p className="text-2xl font-bold text-slate-900">{kpi.value}</p>
+                        <p className="text-[11px] text-slate-400 mt-1">{kpi.sub}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                  {/* Leads last 7 days bar chart */}
+                  <div className="bg-white rounded-xl border border-slate-200 p-5">
+                    <h3 className="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2"><BarChart3 size={16} className="text-blue-600"/> Leads — Last 7 Days</h3>
+                    {last7.every(d => d.count === 0) ? (
+                      <div className="h-28 flex items-center justify-center text-slate-400 text-sm">No leads yet. Share your website to start.</div>
+                    ) : (
+                      <div className="flex items-end gap-2 h-28">
+                        {last7.map((d, i) => (
+                          <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                            <span className="text-[9px] text-slate-500 font-medium">{d.count > 0 ? d.count : ''}</span>
+                            <div className="w-full flex items-end" style={{ height: '80px' }}>
+                              <div className="w-full rounded-t-md transition-all" style={{ height: `${Math.max(d.count > 0 ? (d.count/maxDay)*100 : 0, d.count > 0 ? 6 : 0)}%`, background: i === 6 ? '#163A63' : '#93c5fd' }} />
+                            </div>
+                            <span className={`text-[9px] font-medium ${i === 6 ? 'text-blue-800' : 'text-slate-400'}`}>{d.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {/* Lead Sources */}
+                  <div className="bg-white rounded-xl border border-slate-200 p-5">
+                    <h3 className="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2"><Target size={16} className="text-emerald-600"/> Lead Sources</h3>
+                    {srcEntries.length === 0 ? (
+                      <div className="h-28 flex items-center justify-center text-slate-400 text-sm">No leads yet</div>
+                    ) : (
+                      <div className="space-y-3">
+                        {srcEntries.slice(0,6).map(([src, count]) => (
+                          <div key={src} className="flex items-center gap-3">
+                            <span className="text-base w-5 text-center">{srcEmoji[src]||'📌'}</span>
+                            <div className="flex-1">
+                              <div className="flex justify-between text-xs mb-1">
+                                <span className="font-medium text-slate-700">{src.replace(/_/g,' ')}</span>
+                                <span className="text-slate-400 font-semibold">{count} ({Math.round(count/leads.length*100)}%)</span>
+                              </div>
+                              <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                <div className="h-2 rounded-full transition-all" style={{ width:`${(count/leads.length)*100}%`, background:'#163A63' }} />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/* Pipeline funnel */}
+                {stageCounts.length > 0 && (
+                  <div className="bg-white rounded-xl border border-slate-200 p-5">
+                    <h3 className="font-bold text-slate-800 text-sm mb-4">Sales Pipeline Funnel</h3>
+                    <div className="space-y-2">
+                      {stageCounts.map(s => (
+                        <div key={s.stage} className="flex items-center gap-3">
+                          <span className="text-xs font-semibold text-slate-500 w-36 shrink-0">{s.stage.replace(/_/g,' ')}</span>
+                          <div className="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
+                            <div className="h-6 rounded-full flex items-center pl-3 text-xs font-bold text-white transition-all" style={{ width:`${Math.max((s.count/maxStageCount)*100,8)}%`, background:'#163A63' }}>
+                              {s.count}
+                            </div>
+                          </div>
+                          <span className="text-xs text-slate-400 w-8 text-right">{leads.length > 0 ? Math.round(s.count/leads.length*100) : 0}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {/* Support + performance */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {[
+                    { label: 'Support Response Rate', value: `${responseRate}%`, icon: CheckCircle, color: responseRate >= 80 ? '#2F8F5B' : '#D97706', desc: `${ticketsClosed} of ${tickets.length} tickets resolved` },
+                    { label: 'Open Support Tickets', value: tickets.filter((t:{status:string})=>t.status!=='RESOLVED').length, icon: LifeBuoy, color: '#0891B2', desc: 'Unresolved issues' },
+                    { label: 'Team Members', value: members.length, icon: Users, color: '#7C3AED', desc: 'Active in your account' },
+                  ].map(m => {
+                    const Icon = m.icon;
+                    return (
+                      <div key={m.label} className="bg-white rounded-xl border border-slate-200 p-5">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: m.color+'15' }}>
+                            <Icon size={18} style={{ color: m.color }} />
+                          </div>
+                          <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">{m.label}</p>
+                        </div>
+                        <p className="text-2xl font-bold text-slate-900">{m.value}</p>
+                        <p className="text-xs text-slate-400 mt-1">{m.desc}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* ── TRAFFIC ANALYTICS ── */}
+                {(() => {
+                  const last30days = Array.from({length:30},(_,i)=>{ const d=new Date(now); d.setDate(d.getDate()-(29-i)); return d.toISOString().slice(0,10); });
+                  const viewsPerDay = last30days.map(day => ({ day, count: pageViews.filter(v=>v.created_at?.slice(0,10)===day).length }));
+                  const maxViews = Math.max(...viewsPerDay.map(d=>d.count), 1);
+                  const last7views = viewsPerDay.slice(-7);
+                  // Top referrers
+                  const refCounts: Record<string,number> = {};
+                  pageViews.forEach(v => { const r = v.referrer ? (()=>{ try { return new URL(v.referrer!).hostname; } catch { return v.referrer!; } })() : 'Direct'; refCounts[r] = (refCounts[r]||0)+1; });
+                  const topRefs = Object.entries(refCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+                  // Top countries
+                  const ctryCounts: Record<string,number> = {};
+                  pageViews.forEach(v => { const c = v.country || 'Unknown'; ctryCounts[c] = (ctryCounts[c]||0)+1; });
+                  const topCountries = Object.entries(ctryCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+                  const totalViews = pageViews.length;
+                  const todayViews = pageViews.filter(v=>v.created_at?.slice(0,10)===now.toISOString().slice(0,10)).length;
+                  const uniquePages: Record<string,number> = {};
+                  pageViews.forEach(v=>{ uniquePages[v.path]=(uniquePages[v.path]||0)+1; });
+                  const topPages = Object.entries(uniquePages).sort((a,b)=>b[1]-a[1]).slice(0,5);
+                  return (
+                    <div className="bg-white rounded-xl border border-slate-200 p-5">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">🌐 Website Traffic</h3>
+                        <div className="flex gap-4 text-xs">
+                          <span className="text-slate-500">Total views: <span className="font-bold text-slate-900">{totalViews.toLocaleString()}</span></span>
+                          <span className="text-slate-500">Today: <span className="font-bold text-slate-900">{todayViews}</span></span>
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-400 mb-4">Real visitor data from your published site.</p>
+                      {totalViews === 0 ? (
+                        <div className="py-8 text-center">
+                          <p className="text-slate-400 text-sm mb-1">No visits recorded yet</p>
+                          <p className="text-xs text-slate-400">Publish your site and share the link to start tracking. Make sure you have run the analytics migration in Supabase.</p>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                          {/* 7-day bar chart */}
+                          <div className="lg:col-span-1">
+                            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Visits — Last 7 Days</p>
+                            <div className="flex items-end gap-1.5 h-24">
+                              {last7views.map((d,i) => (
+                                <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                                  <span className="text-[9px] text-slate-500">{d.count > 0 ? d.count : ''}</span>
+                                  <div className="w-full flex items-end" style={{height:'64px'}}>
+                                    <div className="w-full rounded-t" style={{height:`${Math.max(d.count>0?(d.count/maxViews)*100:0, d.count>0?6:0)}%`, background: i===6?'#163A63':'#bfdbfe'}} />
+                                  </div>
+                                  <span className="text-[9px] text-slate-400">{['Su','Mo','Tu','We','Th','Fr','Sa'][new Date(d.day+'T12:00:00').getDay()]}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          {/* Top referrers */}
+                          <div>
+                            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Top Referrers</p>
+                            <div className="space-y-2">
+                              {topRefs.map(([ref, cnt]) => (
+                                <div key={ref} className="flex items-center gap-2 text-xs">
+                                  <span className="text-slate-500 truncate flex-1" title={ref}>{ref}</span>
+                                  <div className="w-24 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                    <div className="h-1.5 rounded-full" style={{width:`${Math.round((cnt/totalViews)*100)}%`, background:'#163A63'}} />
+                                  </div>
+                                  <span className="text-slate-400 w-6 text-right font-semibold shrink-0">{cnt}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          {/* Top countries */}
+                          <div>
+                            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Top Countries</p>
+                            <div className="space-y-2">
+                              {topCountries.map(([ctry, cnt]) => (
+                                <div key={ctry} className="flex items-center gap-2 text-xs">
+                                  <span className="text-slate-500 flex-1">{ctry}</span>
+                                  <div className="w-24 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                    <div className="h-1.5 rounded-full" style={{width:`${Math.round((cnt/totalViews)*100)}%`, background:'#2F8F5B'}} />
+                                  </div>
+                                  <span className="text-slate-400 w-6 text-right font-semibold shrink-0">{cnt}</span>
+                                </div>
+                              ))}
+                              {topPages.length > 0 && (
+                                <div className="pt-2 mt-2 border-t border-slate-100">
+                                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Top Pages</p>
+                                  {topPages.map(([pg, cnt]) => (
+                                    <div key={pg} className="flex items-center justify-between text-xs py-0.5">
+                                      <span className="text-slate-500 truncate flex-1" title={pg}>{pg || '/'}</span>
+                                      <span className="text-slate-400 font-semibold shrink-0 ml-2">{cnt}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* ── EMAIL PERFORMANCE ── */}
+                {(() => {
+                  const sent = emailEvents.filter(e=>e.event_type==='email.sent').length;
+                  const delivered = emailEvents.filter(e=>e.event_type==='email.delivered').length;
+                  const opened = emailEvents.filter(e=>e.event_type==='email.opened').length;
+                  const clicked = emailEvents.filter(e=>e.event_type==='email.clicked').length;
+                  const bounced = emailEvents.filter(e=>e.event_type==='email.bounced').length;
+                  const deliveryRate = sent > 0 ? Math.round((delivered/sent)*100) : 0;
+                  const openRate = delivered > 0 ? Math.round((opened/delivered)*100) : 0;
+                  const clickRate = opened > 0 ? Math.round((clicked/opened)*100) : 0;
+                  const bounceRate = sent > 0 ? Math.round((bounced/sent)*100) : 0;
+                  return (
+                    <div className="bg-white rounded-xl border border-slate-200 p-5">
+                      <h3 className="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">📧 Email Performance</h3>
+                      <p className="text-xs text-slate-400 mb-4">Live data from Resend webhook events.</p>
+                      {sent === 0 ? (
+                        <div className="py-6 text-center">
+                          <p className="text-slate-400 text-sm mb-2">No email data yet</p>
+                          <div className="text-xs text-slate-400 space-y-1 max-w-sm mx-auto text-left">
+                            <p className="font-semibold text-slate-500 mb-2">To enable email tracking:</p>
+                            <p>1. In Resend dashboard → Webhooks → Add endpoint: <span className="font-mono bg-slate-100 px-1 rounded">https://saas.stoklync.com/api/resend-webhook</span></p>
+                            <p>2. Select events: email.sent, email.delivered, email.opened, email.clicked, email.bounced</p>
+                            <p>3. Add <span className="font-mono bg-slate-100 px-1 rounded">org_id</span> tag when sending emails via Marketing tab</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          {[
+                            { label: 'Delivery Rate', value: `${deliveryRate}%`, sub: `${delivered} of ${sent} sent`, color: deliveryRate >= 90 ? '#2F8F5B' : '#D97706', bar: deliveryRate },
+                            { label: 'Open Rate', value: `${openRate}%`, sub: `${opened} opens`, color: openRate >= 25 ? '#2F8F5B' : openRate >= 10 ? '#D97706' : '#EF4444', bar: openRate },
+                            { label: 'Click Rate', value: `${clickRate}%`, sub: `${clicked} clicks`, color: clickRate >= 3 ? '#2F8F5B' : '#0891B2', bar: clickRate },
+                            { label: 'Bounce Rate', value: `${bounceRate}%`, sub: `${bounced} bounces`, color: bounceRate <= 2 ? '#2F8F5B' : '#EF4444', bar: Math.min(bounceRate, 20) * 5 },
+                          ].map(m => (
+                            <div key={m.label} className="text-center">
+                              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">{m.label}</p>
+                              <p className="text-3xl font-black mb-1" style={{color:m.color}}>{m.value}</p>
+                              <div className="w-full bg-slate-100 rounded-full h-1.5 mb-1.5">
+                                <div className="h-1.5 rounded-full transition-all" style={{width:`${Math.min(m.bar,100)}%`, background:m.color}} />
+                              </div>
+                              <p className="text-[10px] text-slate-400">{m.sub}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* ── REVENUE FORECASTING ── */}
+                {(() => {
+                  const paidOrds = orders.filter(o=>['PAID','FULFILLED','CONFIRMED','DELIVERED','PROCESSING'].includes((o.status||'').toUpperCase()));
+                  const ttlRevenue = paidOrds.reduce((s,o)=>s+o.total,0);
+                  const wonLds = leads.filter(l=>(l.stage||'').toUpperCase()==='WON');
+                  const wRate = leads.length > 0 ? wonLds.length / leads.length : 0;
+                  const pipelineStages = ['NEW','QUALIFIED','DISCOVERY','PROPOSAL','STRATEGY_SESSION','NEGOTIATION','CONTRACT_SIGNED'];
+                  const pipelineLeads = leads.filter(l=>pipelineStages.includes((l.stage||'').toUpperCase()));
+                  const avgDeal = wonLds.length > 0 ? ttlRevenue / wonLds.length : (pipelineLeads.length > 0 ? 5000 : 0);
+                  const pipeline30 = pipelineLeads.filter(l=>{ const d=new Date(l.created_at||''); return (now.getTime()-d.getTime()) < 30*86400000; }).length;
+                  const pipeline60 = pipelineLeads.filter(l=>{ const d=new Date(l.created_at||''); return (now.getTime()-d.getTime()) < 60*86400000; }).length;
+                  const pipeline90 = pipelineLeads.length;
+                  const proj30 = Math.round(pipeline30 * wRate * avgDeal);
+                  const proj60 = Math.round(pipeline60 * wRate * avgDeal);
+                  const proj90 = Math.round(pipeline90 * wRate * avgDeal);
+                  const maxProj = Math.max(proj30, proj60, proj90, 1);
+                  // Monthly revenue trend (last 6 months)
+                  const months = Array.from({length:6},(_,i)=>{ const d=new Date(now); d.setMonth(d.getMonth()-(5-i)); return { label: d.toLocaleString('default',{month:'short'}), key: d.toISOString().slice(0,7) }; });
+                  const monthlyRev = months.map(m => ({ label:m.label, total: paidOrds.filter(o=>o.created_at?.slice(0,7)===m.key).reduce((s,o)=>s+o.total,0) }));
+                  const maxMonth = Math.max(...monthlyRev.map(m=>m.total), 1);
+                  return (
+                    <div className="bg-white rounded-xl border border-slate-200 p-5">
+                      <h3 className="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">📈 Revenue Forecast</h3>
+                      <p className="text-xs text-slate-400 mb-4">Projected from pipeline × historical win rate ({Math.round(wRate*100)}%).</p>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Projection bars */}
+                        <div>
+                          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Projected Revenue</p>
+                          {proj90 === 0 ? (
+                            <div className="py-4 text-center text-slate-400 text-sm">
+                              {leads.length === 0 ? 'Add leads to see revenue projections' : 'Move leads through your pipeline to generate forecasts'}
+                            </div>
+                          ) : (
+                            <div className="space-y-4">
+                              {[
+                                { label: '30-day', value: proj30, color: '#163A63' },
+                                { label: '60-day', value: proj60, color: '#2F8F5B' },
+                                { label: '90-day', value: proj90, color: '#7C3AED' },
+                              ].map(p => (
+                                <div key={p.label}>
+                                  <div className="flex justify-between text-xs mb-1.5">
+                                    <span className="font-semibold text-slate-600">{p.label} forecast</span>
+                                    <span className="font-bold text-slate-900">${p.value.toLocaleString()}</span>
+                                  </div>
+                                  <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                                    <div className="h-3 rounded-full transition-all" style={{width:`${Math.max((p.value/maxProj)*100,p.value>0?4:0)}%`, background:p.color}} />
+                                  </div>
+                                </div>
+                              ))}
+                              <p className="text-[10px] text-slate-400 mt-1">Avg deal: ${Math.round(avgDeal).toLocaleString()} · {pipelineLeads.length} active pipeline deals · Win rate: {Math.round(wRate*100)}%</p>
+                            </div>
+                          )}
+                        </div>
+                        {/* Monthly trend */}
+                        <div>
+                          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Monthly Revenue (6 months)</p>
+                          {monthlyRev.every(m=>m.total===0) ? (
+                            <div className="py-4 text-center text-slate-400 text-sm">No revenue recorded yet</div>
+                          ) : (
+                            <div className="flex items-end gap-2 h-24">
+                              {monthlyRev.map((m,i) => (
+                                <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                                  <span className="text-[9px] text-slate-500">{m.total > 0 ? `$${Math.round(m.total/1000)}k` : ''}</span>
+                                  <div className="w-full flex items-end" style={{height:'72px'}}>
+                                    <div className="w-full rounded-t" style={{height:`${Math.max(m.total>0?(m.total/maxMonth)*100:0, m.total>0?4:0)}%`, background: i===5?'#163A63':'#c7d2fe'}} />
+                                  </div>
+                                  <span className={`text-[9px] font-medium ${i===5?'text-blue-800':'text-slate-400'}`}>{m.label}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* ── CUSTOMER LIFETIME VALUE ── */}
+                {(() => {
+                  const paidOrds = orders.filter(o=>['PAID','FULFILLED','CONFIRMED','DELIVERED','PROCESSING'].includes((o.status||'').toUpperCase()));
+                  const ttlRevenue = paidOrds.reduce((s,o)=>s+o.total,0);
+                  // CLV from leads (proxy: each won lead = a customer)
+                  const wonLds = leads.filter(l=>(l.stage||'').toUpperCase()==='WON');
+                  const avgCLV = wonLds.length > 0 ? ttlRevenue / wonLds.length : 0;
+                  // Top customers (by company name from won leads, sorted by likely value)
+                  const topCustomers = wonLds.slice(0,5).map(l => ({
+                    name: l.name || 'Unknown', company: l.company || '', email: l.email,
+                    value: wonLds.length > 0 ? Math.round(ttlRevenue / wonLds.length) : 0,
+                  }));
+                  // Lead-to-customer conversion
+                  const convRate = leads.length > 0 ? Math.round((wonLds.length/leads.length)*100) : 0;
+                  // Time to close (avg days from NEW to WON — approximate from created_at)
+                  const avgDaysToClose = wonLds.length > 0 ? Math.round(wonLds.reduce((s,l)=>{
+                    return s + (now.getTime() - new Date(l.created_at||now).getTime()) / 86400000;
+                  }, 0) / wonLds.length) : 0;
+                  return (
+                    <div className="bg-white rounded-xl border border-slate-200 p-5">
+                      <h3 className="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">💎 Customer Value (CLV)</h3>
+                      <p className="text-xs text-slate-400 mb-4">How much each customer is worth to your business.</p>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-3 gap-3">
+                            {[
+                              { label: 'Avg CLV', value: avgCLV > 0 ? `$${Math.round(avgCLV).toLocaleString()}` : '$0', desc: 'per customer', color: '#163A63' },
+                              { label: 'Conversion', value: `${convRate}%`, desc: 'leads → customers', color: '#2F8F5B' },
+                              { label: 'Avg Close', value: avgDaysToClose > 0 ? `${avgDaysToClose}d` : '—', desc: 'days to close', color: '#7C3AED' },
+                            ].map(m => (
+                              <div key={m.label} className="text-center p-3 rounded-xl bg-slate-50">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{m.label}</p>
+                                <p className="text-xl font-black" style={{color:m.color}}>{m.value}</p>
+                                <p className="text-[10px] text-slate-400">{m.desc}</p>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="text-xs text-slate-500 p-3 bg-blue-50 rounded-xl border border-blue-100">
+                            <span className="font-bold text-blue-700">💡 To increase CLV:</span> Focus on upselling won customers, add retainer/recurring packages, and improve retention through the support tab.
+                          </div>
+                        </div>
+                        {/* Top customers table */}
+                        <div>
+                          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Top Customers</p>
+                          {topCustomers.length === 0 ? (
+                            <div className="py-4 text-center text-slate-400 text-sm">Move leads to WON stage to see customer value here</div>
+                          ) : (
+                            <div className="space-y-2">
+                              {topCustomers.map((c, i) => (
+                                <div key={i} className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors">
+                                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style={{background:'#163A63'}}>
+                                    {(c.name[0]||'?').toUpperCase()}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-semibold text-slate-800 truncate">{c.name}</p>
+                                    <p className="text-[10px] text-slate-400 truncate">{c.company || c.email}</p>
+                                  </div>
+                                  <div className="text-right shrink-0">
+                                    <p className="text-xs font-bold text-slate-900">${c.value.toLocaleString()}</p>
+                                    <p className="text-[10px] text-slate-400">est. value</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
             );
           })()}
           {tab === 'website' && (
@@ -1623,7 +2111,41 @@ export default function DashboardPage() {
             <div className="max-w-2xl space-y-8">
               <div>
                 <h2 className="text-xl font-bold text-slate-800 mb-2">Marketing</h2>
-                <p className="text-sm text-slate-500">Get leads and send emails. Run Facebook ads, point them to your site, and leads drop into CRM.</p>
+                <p className="text-sm text-slate-500">Get leads, run ads, and send targeted emails. Every lead from every channel lands in your CRM automatically.</p>
+              </div>
+
+              {/* Ads Section */}
+              <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center"><Megaphone size={18} className="text-white"/></div>
+                  <div><h3 className="font-bold text-slate-800">Run Ads</h3><p className="text-xs text-slate-500">Facebook, Instagram and Google ads that feed leads into your CRM</p></div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {[
+                    { name: 'Facebook Ads', icon: '📘', color: '#1877F2', desc: 'Run lead gen campaigns on Facebook. Your site link or webhook catches every lead.', link: 'https://www.facebook.com/adsmanager' },
+                    { name: 'Instagram Ads', icon: '📸', color: '#E1306C', desc: 'Promote your site on Instagram. Leads from Instagram forms go directly to CRM.', link: 'https://business.instagram.com/ads' },
+                    { name: 'Google Ads', icon: '🔍', color: '#4285F4', desc: 'Search and display ads. Point traffic to your site URL and track leads.', link: 'https://ads.google.com' },
+                  ].map(ad => (
+                    <a key={ad.name} href={ad.link} target="_blank" rel="noopener noreferrer" className="block p-4 rounded-xl border-2 border-slate-100 hover:border-blue-300 hover:bg-blue-50 transition-all group">
+                      <div className="text-2xl mb-2">{ad.icon}</div>
+                      <p className="font-bold text-sm text-slate-800 mb-1">{ad.name}</p>
+                      <p className="text-xs text-slate-500 leading-relaxed">{ad.desc}</p>
+                      <p className="text-xs font-semibold mt-3 flex items-center gap-1" style={{ color: ad.color }}>Open {ad.name} <ArrowRight size={10}/></p>
+                    </a>
+                  ))}
+                </div>
+                <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                  <p className="text-sm font-bold text-slate-800 mb-1">Your lead capture webhook</p>
+                  <p className="text-xs text-slate-600 mb-2">Connect this URL to Facebook Lead Ads, Zapier, or any ad platform to send leads directly into your CRM:</p>
+                  <div className="flex gap-2">
+                    <code className="flex-1 p-2 bg-white rounded-lg border border-slate-200 text-xs font-mono break-all text-slate-700">
+                      {typeof window !== 'undefined' ? `${window.location.origin}/api/submit-contact` : '/api/submit-contact'}
+                    </code>
+                    <button type="button" onClick={() => { const u = typeof window !== 'undefined' ? `${window.location.origin}/api/submit-contact` : ''; navigator.clipboard?.writeText(u); }} className="shrink-0 px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold hover:bg-slate-50">Copy</button>
+                  </div>
+                  {org && <p className="text-xs text-slate-500 mt-2">Your org_id: <code className="bg-white px-1.5 py-0.5 rounded border text-slate-700">{org.id}</code> <button type="button" onClick={() => navigator.clipboard?.writeText(org.id)} className="text-blue-600 hover:underline ml-1 font-medium">Copy</button></p>}
+                  <p className="text-xs text-slate-400 mt-2">POST body: <code className="font-mono">org_id, name, email, phone, company, source, message</code></p>
+                </div>
               </div>
               <div className="bg-white rounded-xl border border-slate-200 p-6">
                 <h3 className="font-semibold text-slate-800 mb-3">Quick Email Templates</h3>
