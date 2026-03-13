@@ -93,29 +93,31 @@ export default function Home() {
       <section className="pt-36 pb-28 px-6 relative overflow-hidden">
         {/* Background glow */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-emerald-500/10 blur-[100px]" />
-          <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] rounded-full bg-[#163A63]/30 blur-[80px]" />
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] rounded-full bg-emerald-500/8 blur-[120px]" />
+          <div className="absolute top-1/2 left-1/4 w-[350px] h-[350px] rounded-full bg-[#163A63]/25 blur-[90px]" />
         </div>
 
         <div className="max-w-4xl mx-auto text-center relative">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-6">
             <Sparkles size={12} />
-            B2B Wholesale Marketplace Platform
+            Solutions for Your Business
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-[1.05]">
-            <span className="bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-              Sell Wholesale.
+          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-5 leading-[1.05]">
+            <span className="bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
+              Everything You Need
             </span>
             <br />
-            <span className="bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
-              Run Everything.
+            <span className="bg-gradient-to-r from-emerald-400 to-emerald-500 bg-clip-text text-transparent">
+              to Succeed.
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Launch your own branded B2B marketplace, manage orders and deliveries,
-            and grow your wholesale business — all from one powerful platform.
+          <p className="text-lg md:text-xl text-slate-400 mb-4 max-w-2xl mx-auto leading-relaxed">
+            Run your business online. Sell wholesale, manage orders and deliveries, serve your customers — all from one powerful platform.
+          </p>
+          <p className="text-sm text-slate-500 mb-10 max-w-xl mx-auto">
+            We provide the tools and support to help your business thrive.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -123,7 +125,7 @@ export default function Home() {
               href="/auth/signin"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-all hover:scale-[1.02] text-sm"
             >
-              Start Your Store <ArrowRight size={16} />
+              Start Free Trial <ArrowRight size={16} />
             </Link>
             <Link
               href="#features"
