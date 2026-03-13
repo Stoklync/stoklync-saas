@@ -502,7 +502,7 @@ export default function DashboardPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [websiteSubTab, setWebsiteSubTab] = useState<WebsiteSubTab>('preview');
   const [branding, setBranding] = useState({
-    company_name: '', logo_url: '', primary_color: '#163A63', phone: '', whatsapp: '', address: '',
+    company_name: '', logo_url: '', primary_color: '#163A63', secondary_color: '#0f172a', logo_size: 'medium', cta_text: 'Get Started', phone: '', whatsapp: '', address: '',
     info_email: '', support_email: '', sales_email: '', contact_email: '',
     instagram_url: '', facebook_url: '', business_type: 'product' as 'product' | 'service',
     facebook_pixel_id: '', ga_id: '', auto_welcome_email: false,
@@ -510,6 +510,7 @@ export default function DashboardPage() {
   const [websiteCms, setWebsiteCms] = useState({
     hero_title: '', hero_subtitle: '', value_line: '', process_title: '', process_subtitle: '',
     about_title: '', about_body1: '', about_body2: '', stock_quote_title: '', stock_quote_subtitle: '',
+    template: 'modern' as 'modern' | 'minimal' | 'bold' | 'dark', hero_image_url: '', hero_image_fit: 'cover' as 'cover' | 'contain', hero_image_opacity: 40,
   });
   const [supportFilter, setSupportFilter] = useState<'ALL' | 'ESCALATIONS' | 'OPEN' | 'IN_PROGRESS' | 'RESOLVED'>('ALL');
   const [ticketForm, setTicketForm] = useState<{ subject: string; customer: string; priority: 'LOW' | 'MEDIUM' | 'HIGH'; assignee: string; source: 'MANUAL' | 'LEAD_ESCALATION' | 'CUSTOMER_PORTAL' | 'WEBSITE' }>({ subject: '', customer: '', priority: 'MEDIUM', assignee: '', source: 'MANUAL' });
@@ -523,6 +524,8 @@ export default function DashboardPage() {
   const [marketingSending, setMarketingSending] = useState(false);
   const [marketingSentCount, setMarketingSentCount] = useState(0);
   const [logoUploading, setLogoUploading] = useState(false);
+  const [logoError, setLogoError] = useState('');
+  const [heroImageUploading, setHeroImageUploading] = useState(false);
   const [crmSubTab, setCrmSubTab] = useState<CrmSubTab>('pipeline');
   const [crmViewType, setCrmViewType] = useState<CrmViewType>('deals');
   const [crmSearch, setCrmSearch] = useState('');
@@ -552,6 +555,7 @@ export default function DashboardPage() {
       return;
     }
     const run = async () => {
+      try {
       const { data: { session } } = await client.auth.getSession();
       if (!session) {
         router.replace('/auth/signin');
@@ -639,6 +643,9 @@ export default function DashboardPage() {
           company_name: String(rb.company_name || orgData?.name || ''),
           logo_url: String(rb.logo_url || ''),
           primary_color: String(rb.primary_color || '#163A63'),
+          secondary_color: String((rb as Record<string, unknown>).secondary_color || '#0f172a'),
+          logo_size: String((rb as Record<string, unknown>).logo_size || 'medium') as 'small' | 'medium' | 'large',
+          cta_text: String((rb as Record<string, unknown>).cta_text || 'Get Started'),
           phone: String(rb.phone || ''),
           whatsapp: String(rb.whatsapp || ''),
           address: String(rb.address || ''),
@@ -679,9 +686,17 @@ export default function DashboardPage() {
           about_body2: String(rc.about_body2 || ''),
           stock_quote_title: String(rc.stock_quote_title || 'Get in touch'),
           stock_quote_subtitle: String(rc.stock_quote_subtitle || "Leave your details and we'll reach out."),
+          template: (['modern', 'minimal', 'bold', 'dark'].includes(String(rc.template || '')) ? rc.template : 'modern') as 'modern' | 'minimal' | 'bold' | 'dark',
+          hero_image_url: String(rc.hero_image_url || ''),
+          hero_image_fit: (rc.hero_image_fit === 'contain' ? 'contain' : 'cover') as 'cover' | 'contain',
+          hero_image_opacity: Math.min(90, Math.max(5, Number(rc.hero_image_opacity) || 40)),
         });
       }
-      setLoading(false);
+      } catch (err) {
+        console.error('Dashboard load error:', err);
+      } finally {
+        setLoading(false);
+      }
     };
     run();
   }, [router]);
@@ -727,7 +742,7 @@ export default function DashboardPage() {
     try {
       await supabase.from('branding').upsert({
         org_id: org.id, company_name: branding.company_name, logo_url: branding.logo_url || null,
-        primary_color: branding.primary_color || '#163A63', phone: branding.phone || null, whatsapp: branding.whatsapp || null,
+        primary_color: branding.primary_color || '#163A63', secondary_color: branding.secondary_color || null, logo_size: (branding as Record<string, unknown>).logo_size || 'medium', cta_text: (branding as Record<string, unknown>).cta_text || 'Get Started', phone: branding.phone || null, whatsapp: branding.whatsapp || null,
         address: branding.address || null, info_email: branding.info_email || null, support_email: branding.support_email || null,
         sales_email: branding.sales_email || null, contact_email: branding.contact_email || null,
         instagram_url: branding.instagram_url || null, facebook_url: branding.facebook_url || null,
@@ -746,6 +761,7 @@ export default function DashboardPage() {
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !org || !supabase) return;
+    setLogoError('');
     setLogoUploading(true);
     try {
       const ext = file.name.split('.').pop() || 'png';
@@ -760,8 +776,33 @@ export default function DashboardPage() {
       setWebsitePreviewKey(k => k + 1);
     } catch (err) {
       console.warn('Logo upload failed:', err);
+      setLogoError('Upload failed. Ensure Supabase has a public "site-images" bucket. See console for details.');
     } finally {
       setLogoUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleHeroImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !org || !supabase) return;
+    setHeroImageUploading(true);
+    try {
+      const ext = file.name.split('.').pop() || 'jpg';
+      const path = `${org.id}/hero-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from('site-images').upload(path, file, { upsert: true });
+      if (upErr) throw upErr;
+      const { data: urlData } = supabase.storage.from('site-images').getPublicUrl(path);
+      const heroUrl = urlData.publicUrl;
+      setWebsiteCms(c => ({ ...c, hero_image_url: heroUrl }));
+      await supabase.from('website_cms').upsert({
+        org_id: org.id, hero_image_url: heroUrl, updated_at: new Date().toISOString(),
+      }, { onConflict: 'org_id' });
+      setWebsitePreviewKey(k => k + 1);
+    } catch (err) {
+      console.warn('Hero image upload failed:', err);
+    } finally {
+      setHeroImageUploading(false);
       e.target.value = '';
     }
   };
@@ -815,14 +856,16 @@ export default function DashboardPage() {
   const saveWebsiteCms = async () => {
     if (!supabase || !org || !permissions.edit_branding) return;
     try {
-      await supabase.from('website_cms').upsert({
-        org_id: org.id, hero_title: websiteCms.hero_title, hero_subtitle: websiteCms.hero_subtitle,
-        value_line: websiteCms.value_line || null, process_title: websiteCms.process_title,
-        process_subtitle: websiteCms.process_subtitle || null, about_title: websiteCms.about_title,
-        about_body1: websiteCms.about_body1 || null, about_body2: websiteCms.about_body2 || null,
-        stock_quote_title: websiteCms.stock_quote_title, stock_quote_subtitle: websiteCms.stock_quote_subtitle || null,
-        updated_at: new Date().toISOString(),
-      }, { onConflict: 'org_id' });
+        await supabase.from('website_cms').upsert({
+          org_id: org.id, hero_title: websiteCms.hero_title, hero_subtitle: websiteCms.hero_subtitle,
+          value_line: websiteCms.value_line || null, process_title: websiteCms.process_title,
+          process_subtitle: websiteCms.process_subtitle || null, about_title: websiteCms.about_title,
+          about_body1: websiteCms.about_body1 || null, about_body2: websiteCms.about_body2 || null,
+          stock_quote_title: websiteCms.stock_quote_title, stock_quote_subtitle: websiteCms.stock_quote_subtitle || null,
+          template: websiteCms.template || 'modern', hero_image_url: websiteCms.hero_image_url || null,
+          hero_image_fit: websiteCms.hero_image_fit || 'cover', hero_image_opacity: websiteCms.hero_image_opacity ?? 40,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'org_id' });
       setSettingsSaved(true);
       setWebsitePreviewKey(k => k + 1);
       setTimeout(() => setSettingsSaved(false), 2000);
@@ -1134,8 +1177,8 @@ export default function DashboardPage() {
                         <div className="flex items-start gap-4">
                           {branding.logo_url ? (
                             <div className="relative shrink-0">
-                              <img src={branding.logo_url} alt="Logo" className="h-16 max-w-[180px] object-contain rounded-xl border border-slate-200 p-2 bg-white" onError={(e) => (e.currentTarget.style.display = 'none')} />
-                              <button type="button" onClick={() => setBranding({ ...branding, logo_url: '' })} className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs leading-none hover:bg-red-600">×</button>
+                              <img src={branding.logo_url} alt="Logo" className="h-16 max-w-[180px] object-contain rounded-xl border border-slate-200 p-2 bg-white" onError={() => { setBranding(b => ({ ...b, logo_url: '' })); setLogoError('Logo failed to load. Remove and re-upload.'); }} />
+                              <button type="button" onClick={() => { setBranding({ ...branding, logo_url: '' }); setLogoError(''); }} className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs leading-none hover:bg-red-600">×</button>
                             </div>
                           ) : (
                             <div className="w-20 h-16 rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center text-slate-400 shrink-0">
@@ -1148,7 +1191,8 @@ export default function DashboardPage() {
                               {logoUploading ? 'Uploading…' : 'Upload logo'}
                               <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
                             </label>
-                            <p className="text-xs text-slate-500 mt-2">PNG or SVG with transparent background recommended. Max 2 MB.</p>
+                            {logoError && <p className="text-xs text-red-600 mt-2">{logoError}</p>}
+                            <p className="text-xs text-slate-500 mt-1">PNG or SVG with transparent background. Max 2 MB. Create a public &quot;site-images&quot; bucket in Supabase Storage if upload fails.</p>
                           </div>
                         </div>
                       </div>
@@ -1164,6 +1208,28 @@ export default function DashboardPage() {
                               style={{ background: c, width: 28, height: 28, borderRadius: 8, border: branding.primary_color === c ? '3px solid #fff' : '2px solid transparent', boxShadow: branding.primary_color === c ? `0 0 0 2px ${c}` : 'none' }} />
                           ))}
                         </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Secondary colour</label>
+                        <div className="flex gap-3 items-center">
+                          <input type="color" value={branding.secondary_color || '#0f172a'} onChange={e => setBranding({ ...branding, secondary_color: e.target.value })} className="w-14 h-12 rounded-xl border border-slate-200 cursor-pointer p-1" />
+                          <input type="text" value={branding.secondary_color} onChange={e => setBranding({ ...branding, secondary_color: e.target.value })} placeholder="#0f172a" className="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-slate-300" />
+                        </div>
+                        <p className="text-xs text-slate-500 mt-1">Used for gradients, buttons, and accents on your site.</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Logo size on site</label>
+                        <div className="flex gap-2">
+                          {(['small', 'medium', 'large'] as const).map(s => (
+                            <button key={s} type="button" onClick={() => setBranding({ ...branding, logo_size: s })} className={`px-4 py-2 rounded-xl text-sm font-medium capitalize ${(branding as Record<string, unknown>).logo_size === s ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>{s}</button>
+                          ))}
+                        </div>
+                        <p className="text-xs text-slate-500 mt-1">Small (32px), Medium (48px), Large (64px) on your public site.</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">CTA button text</label>
+                        <input type="text" value={String((branding as Record<string, unknown>).cta_text || 'Get Started')} onChange={e => setBranding({ ...branding, cta_text: e.target.value })} placeholder="Get Started" className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-300" />
+                        <p className="text-xs text-slate-500 mt-1">The main hero button text on your site.</p>
                       </div>
                       <div>
                         <label className="block text-sm font-semibold text-slate-700 mb-1.5">Business type</label>
@@ -1205,11 +1271,11 @@ export default function DashboardPage() {
                   {/* Live colour preview */}
                   <div className="bg-white rounded-xl border border-slate-200 p-6">
                     <h4 className="font-semibold text-slate-800 mb-3">Colour Preview</h4>
-                    <div className="rounded-xl overflow-hidden border border-slate-200" style={{ background: `linear-gradient(135deg, ${branding.primary_color || '#163A63'} 0%, #0f172a 100%)` }}>
+                    <div className="rounded-xl overflow-hidden border border-slate-200" style={{ background: `linear-gradient(135deg, ${branding.primary_color || '#163A63'} 0%, ${branding.secondary_color || '#0f172a'} 100%)` }}>
                       <div className="p-6">
                         <div className="text-2xl font-black text-white mb-2">{branding.company_name || 'Your Company'}</div>
                         <p className="text-white/70 text-sm mb-4">This is how your website hero will look.</p>
-                        <div className="inline-flex items-center gap-2 bg-white text-sm font-bold px-4 py-2 rounded-full" style={{ color: branding.primary_color || '#163A63' }}>Get Started →</div>
+                        <span className="inline-flex items-center gap-2 bg-white text-sm font-bold px-4 py-2 rounded-full pointer-events-none" style={{ color: branding.primary_color || '#163A63' }}>{String((branding as Record<string, unknown>).cta_text || 'Get Started')} →</span>
                       </div>
                     </div>
                   </div>
@@ -1231,6 +1297,15 @@ export default function DashboardPage() {
               {websiteSubTab === 'cms' && (
                 <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-6">
                   <div>
+                    <h3 className="font-bold text-slate-800 mb-1">Site style</h3>
+                    <p className="text-sm text-slate-500 mb-3">Choose a visual theme for your website.</p>
+                    <div className="flex flex-wrap gap-2 mb-5">
+                      {(['modern', 'minimal', 'bold', 'dark'] as const).map((t) => (
+                        <button key={t} type="button" onClick={() => setWebsiteCms({ ...websiteCms, template: t })} className={`px-4 py-2 rounded-xl text-sm font-medium capitalize transition-all ${websiteCms.template === t ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                          {t === 'modern' ? '✦ Modern' : t === 'minimal' ? '◎ Minimal' : t === 'bold' ? '◆ Bold' : '● Dark'}
+                        </button>
+                      ))}
+                    </div>
                     <h3 className="font-bold text-slate-800 mb-1">Website Content</h3>
                     <p className="text-sm text-slate-500 mb-5">Pick a template to instantly fill your website with professional content, then customise it.</p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-2">
@@ -1265,6 +1340,34 @@ export default function DashboardPage() {
                     <div className="border-l-2 border-slate-200 pl-4">
                       <p className="text-xs font-semibold text-slate-500 uppercase mb-2">Top section</p>
                       <div className="space-y-3">
+                        <div>
+                          <label className="block text-sm font-medium text-slate-700 mb-1">Hero background image</label>
+                          <div className="flex items-center gap-3 flex-wrap">
+                            {websiteCms.hero_image_url ? (
+                              <div className="relative">
+                                <img src={websiteCms.hero_image_url} alt="Hero" className="h-20 w-32 object-cover rounded-lg border border-slate-200" />
+                                <button type="button" onClick={() => setWebsiteCms({ ...websiteCms, hero_image_url: '' })} className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs">×</button>
+                              </div>
+                            ) : null}
+                            <label className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium cursor-pointer hover:bg-slate-50 transition-colors ${heroImageUploading ? 'opacity-60 pointer-events-none' : ''}`}>
+                              {heroImageUploading ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
+                              {heroImageUploading ? 'Uploading…' : 'Upload hero image'}
+                              <input type="file" accept="image/*" className="hidden" onChange={handleHeroImageUpload} />
+                            </label>
+                            {websiteCms.hero_image_url && (
+                              <div className="flex items-center gap-2">
+                                <select value={websiteCms.hero_image_fit} onChange={e => setWebsiteCms({ ...websiteCms, hero_image_fit: e.target.value as 'cover' | 'contain' })} className="p-2 border border-slate-200 rounded-lg text-sm">
+                                  <option value="cover">Cover</option>
+                                  <option value="contain">Contain</option>
+                                </select>
+                                <label className="text-xs text-slate-500">Opacity</label>
+                                <input type="range" min={5} max={90} value={websiteCms.hero_image_opacity} onChange={e => setWebsiteCms({ ...websiteCms, hero_image_opacity: Number(e.target.value) || 40 })} className="w-24" />
+                                <span className="text-xs text-slate-500">{websiteCms.hero_image_opacity}%</span>
+                              </div>
+                            )}
+                          </div>
+                          <p className="text-xs text-slate-500 mt-1">Optional. Image shows behind hero text with a dark overlay.</p>
+                        </div>
                         <div><label className="block text-sm font-medium text-slate-700 mb-1">Headline</label><input type="text" value={websiteCms.hero_title} onChange={e => setWebsiteCms({ ...websiteCms, hero_title: e.target.value })} placeholder="e.g. Grow your business" className="w-full p-3 border border-slate-200 rounded-lg text-sm" /></div>
                         <div><label className="block text-sm font-medium text-slate-700 mb-1">Subheadline</label><textarea value={websiteCms.hero_subtitle} onChange={e => setWebsiteCms({ ...websiteCms, hero_subtitle: e.target.value })} placeholder="Supporting line under the headline" rows={2} className="w-full p-3 border border-slate-200 rounded-lg text-sm" /></div>
                         <div><label className="block text-sm font-medium text-slate-700 mb-1">Tagline</label><input type="text" value={websiteCms.value_line} onChange={e => setWebsiteCms({ ...websiteCms, value_line: e.target.value })} placeholder="Short catchphrase (optional)" className="w-full p-3 border border-slate-200 rounded-lg text-sm" /></div>

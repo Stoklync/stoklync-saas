@@ -8,6 +8,7 @@ import Link from 'next/link';
 interface SiteData {
   branding: {
     companyName: string; logoUrl: string; primaryColor: string;
+    logoSize?: string; ctaText?: string;
     infoEmail: string; supportEmail: string; salesEmail: string;
     phone: string; whatsapp: string; address: string;
     instagramUrl: string; facebookUrl: string; businessType: string;
@@ -19,6 +20,9 @@ interface SiteData {
     aboutTitle: string; aboutBody1: string; aboutBody2: string;
     stockQuoteTitle: string; stockQuoteSubtitle: string;
     template?: string;
+    heroImageUrl?: string | null;
+    heroImageFit?: string;
+    heroImageOpacity?: number;
   };
 }
 
@@ -82,6 +86,36 @@ const TEMPLATES: Record<string, {
       { name: 'Sarah L.', role: 'Entrepreneur', text: 'Simple, clean, and incredibly effective. Exactly what my business needed.' },
       { name: 'David M.', role: 'Founder', text: 'The attention to detail is unmatched. Great experience from start to finish.' },
       { name: 'Lisa K.', role: 'Manager', text: 'Reliable and transparent. A true partner for business growth.' },
+    ],
+  },
+  bold: {
+    heroGradient: (c) => `linear-gradient(135deg, #0f172a 0%, ${c} 50%, #0f172a 100%)`,
+    accentLight: (c) => `${c}22`,
+    features: [
+      { icon: <Zap size={24} />, title: 'High Impact', desc: 'Bold solutions that get noticed. We cut through the noise.' },
+      { icon: <Shield size={24} />, title: 'Uncompromising', desc: 'No shortcuts. Only quality that stands the test of time.' },
+      { icon: <TrendingUp size={24} />, title: 'Rapid Results', desc: 'Move fast. Execute with precision. Deliver on promise.' },
+    ],
+    stats: [{ value: '99%', label: 'Success Rate' }, { value: '50+', label: 'Industries' }, { value: '2×', label: 'Average Growth' }, { value: '24h', label: 'Response' }],
+    testimonials: [
+      { name: 'Alex T.', role: 'Founder', text: 'Bold, direct, and exactly what we needed. They delivered beyond expectations.' },
+      { name: 'Jordan R.', role: 'CMO', text: 'The energy and professionalism are unmatched. Highly recommend for growth-focused brands.' },
+      { name: 'Morgan K.', role: 'Director', text: 'Confident execution from day one. A true partner in scaling.' },
+    ],
+  },
+  dark: {
+    heroGradient: () => `linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)`,
+    accentLight: (c) => `${c}25`,
+    features: [
+      { icon: <Shield size={24} />, title: 'Premium Quality', desc: 'Sleek, professional, built for brands that demand excellence.' },
+      { icon: <Users size={24} />, title: 'Discrete & Trusted', desc: 'Your success, our priority. Confidential and results-driven.' },
+      { icon: <Award size={24} />, title: 'Refined Results', desc: 'Sophisticated solutions for discerning clients.' },
+    ],
+    stats: [{ value: '500+', label: 'Clients' }, { value: 'A+', label: 'Reputation' }, { value: '10+', label: 'Years' }, { value: '∞', label: 'Support' }],
+    testimonials: [
+      { name: 'Chris N.', role: 'Executive', text: 'Sophisticated and effective. Exactly the premium experience we expected.' },
+      { name: 'Sam P.', role: 'Partner', text: 'Discrete, professional, and delivers. Rare combination.' },
+      { name: 'Taylor L.', role: 'VP', text: 'Refined approach with measurable outcomes. Highly recommended.' },
     ],
   },
 };
@@ -176,7 +210,12 @@ export default function SitePage() {
   };
 
   const primary = data?.branding?.primaryColor || '#163A63';
-  const tpl = TEMPLATES['modern'];
+  const templateKey = (data?.cms?.template || 'modern') as keyof typeof TEMPLATES;
+  const tpl = TEMPLATES[templateKey] ?? TEMPLATES['modern'];
+  const isLightHero = templateKey === 'minimal';
+  const heroImageUrl = data?.cms?.heroImageUrl;
+  const heroImageOpacity = Math.min(90, Math.max(5, data?.cms?.heroImageOpacity ?? 40)) / 100;
+  const heroImageFit = data?.cms?.heroImageFit || 'cover';
   const contactEmail = data?.branding?.supportEmail || data?.branding?.salesEmail || data?.branding?.infoEmail || '';
   const whatsappLink = data?.branding?.whatsapp ? `https://wa.me/${data.branding.whatsapp.replace(/\D/g, '')}` : null;
   const fbPixelId = data?.branding?.facebookPixelId || '';
@@ -212,7 +251,7 @@ export default function SitePage() {
     .reveal-right.revealed { opacity: 1; transform: translateX(0); }
     .reveal-scale { opacity: 0; transform: scale(0.92); transition: opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1); }
     .reveal-scale.revealed { opacity: 1; transform: scale(1); }
-    .hero-bg { background: ${tpl.heroGradient(primary)}; }
+    .hero-bg { background: ${heroImageUrl ? 'transparent' : tpl.heroGradient(primary)}; }
     @keyframes float { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-20px) rotate(5deg)} }
     @keyframes float2 { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-15px) rotate(-3deg)} }
     @keyframes fadeUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
@@ -278,9 +317,9 @@ export default function SitePage() {
           <div style={{ maxWidth: 1200, margin: '0 auto', height: 70, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               {data?.branding?.logoUrl && (
-                <img src={data.branding.logoUrl} alt={data.branding.companyName} style={{ height: 36, width: 'auto', objectFit: 'contain' }} />
+                <img src={data.branding.logoUrl} alt={data.branding.companyName} style={{ height: data.branding.logoSize === 'large' ? 48 : data.branding.logoSize === 'small' ? 28 : 36, width: 'auto', objectFit: 'contain' }} />
               )}
-              <span style={{ fontSize: 20, fontWeight: 800, color: scrolled ? primary : '#fff', letterSpacing: '-0.3px', transition: 'color 0.3s' }}>
+              <span style={{ fontSize: 20, fontWeight: 800, color: scrolled ? primary : (isLightHero ? '#0f172a' : '#fff'), letterSpacing: '-0.3px', transition: 'color 0.3s' }}>
                 {data?.branding?.companyName || 'Your Company'}
               </span>
             </div>
@@ -288,19 +327,19 @@ export default function SitePage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
               {['Services', 'About', 'Contact'].map((item) => (
                 <a key={item} href={`#${item.toLowerCase()}`} style={{
-                  color: scrolled ? '#64748b' : 'rgba(255,255,255,0.85)',
+                  color: scrolled ? '#64748b' : (isLightHero ? '#475569' : 'rgba(255,255,255,0.85)'),
                   fontWeight: 500, fontSize: 14, textDecoration: 'none',
                   transition: 'color 0.2s', display: 'none',
                 }}
-                  onMouseEnter={e => (e.target as HTMLElement).style.color = scrolled ? primary : '#fff'}
-                  onMouseLeave={e => (e.target as HTMLElement).style.color = scrolled ? '#64748b' : 'rgba(255,255,255,0.85)'}
+                  onMouseEnter={e => (e.target as HTMLElement).style.color = scrolled ? primary : (isLightHero ? primary : '#fff')}
+                  onMouseLeave={e => (e.target as HTMLElement).style.color = scrolled ? '#64748b' : (isLightHero ? '#475569' : 'rgba(255,255,255,0.85)')}
                   className="desktop-nav-link"
                 >{item}</a>
               ))}
               <a href="#contact" style={{
                 background: primary, color: '#fff', padding: '10px 22px', borderRadius: 50,
                 fontWeight: 600, fontSize: 14, textDecoration: 'none', display: 'block',
-              }} className="btn-primary">Get Started</a>
+              }} className="btn-primary">{data?.branding?.ctaText || 'Get Started'}</a>
             </div>
           </div>
         </nav>
@@ -311,37 +350,45 @@ export default function SitePage() {
         `}</style>
 
         {/* Hero */}
-        <section className="hero-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', paddingTop: 80 }}>
-          {/* Animated background elements */}
-          <div className="float-1" style={{ position: 'absolute', top: '10%', right: '8%', width: 300, height: 300, borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', background: `rgba(255,255,255,0.05)`, pointerEvents: 'none' }} />
-          <div className="float-2" style={{ position: 'absolute', bottom: '15%', left: '5%', width: 200, height: 200, borderRadius: '40% 60% 30% 70% / 60% 40% 50% 50%', background: `rgba(255,255,255,0.04)`, pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', top: '20%', left: '15%', width: 400, height: 400, borderRadius: '50%', background: `radial-gradient(circle, ${primary}40 0%, transparent 70%)`, filter: 'blur(60px)', pointerEvents: 'none' }} />
+        <section className="hero-bg" style={{
+          minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', paddingTop: 80,
+          ...(heroImageUrl ? {
+            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,${1 - heroImageOpacity}), rgba(0,0,0,${0.85 - heroImageOpacity * 0.5})), url("${heroImageUrl.replace(/"/g, '%22')}")`,
+            backgroundSize: heroImageFit === 'contain' ? 'contain' : 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          } : {}),
+        }}>
+          {/* Animated background elements - only when no hero image */}
+          {!heroImageUrl && !isLightHero && <div className="float-1" style={{ position: 'absolute', top: '10%', right: '8%', width: 300, height: 300, borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', background: `rgba(255,255,255,0.05)`, pointerEvents: 'none' }} />}
+          {!isLightHero && <div className="float-2" style={{ position: 'absolute', bottom: '15%', left: '5%', width: 200, height: 200, borderRadius: '40% 60% 30% 70% / 60% 40% 50% 50%', background: `rgba(255,255,255,0.04)`, pointerEvents: 'none' }} />}
+          {!isLightHero && <div style={{ position: 'absolute', top: '20%', left: '15%', width: 400, height: 400, borderRadius: '50%', background: `radial-gradient(circle, ${primary}40 0%, transparent 70%)`, filter: 'blur(60px)', pointerEvents: 'none' }} />}
 
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px', width: '100%' }}>
             <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }}>
               <div>
                 {data?.branding?.businessType && (
-                  <div className="hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', padding: '8px 16px', borderRadius: 50, marginBottom: 24, border: '1px solid rgba(255,255,255,0.2)' }}>
+                  <div className="hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: isLightHero ? 'rgba(15,23,42,0.08)' : 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', padding: '8px 16px', borderRadius: 50, marginBottom: 24, border: isLightHero ? '1px solid rgba(15,23,42,0.12)' : '1px solid rgba(255,255,255,0.2)' }}>
                     <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#4ade80', display: 'block', position: 'relative' }} className="tag-pulse" />
-                    <span style={{ fontSize: 13, color: '#fff', fontWeight: 500 }}>
+                    <span style={{ fontSize: 13, color: isLightHero ? '#334155' : '#fff', fontWeight: 500 }}>
                       {data.branding.businessType === 'service' ? '✦ Professional Services' : data.branding.businessType === 'consulting' ? '✦ Strategic Consulting' : '✦ Wholesale & Supply'}
                     </span>
                   </div>
                 )}
-                <h1 className="hero-title" style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: 20, letterSpacing: '-1px' }}>
+                <h1 className="hero-title" style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: 900, color: isLightHero ? '#0f172a' : '#fff', lineHeight: 1.1, marginBottom: 20, letterSpacing: '-1px' }}>
                   {data?.cms?.heroTitle || 'Build Your Business Online'}
                 </h1>
-                <p className="hero-subtitle" style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'rgba(255,255,255,0.8)', lineHeight: 1.7, marginBottom: 12 }}>
+                <p className="hero-subtitle" style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: isLightHero ? '#475569' : 'rgba(255,255,255,0.8)', lineHeight: 1.7, marginBottom: 12 }}>
                   {data?.cms?.heroSubtitle || 'We help businesses grow with reliable service and real results.'}
                 </p>
                 {data?.cms?.valueLine && (
-                  <p className="hero-subtitle" style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', marginBottom: 36, fontStyle: 'italic' }}>
+                  <p className="hero-subtitle" style={{ fontSize: 14, color: isLightHero ? '#64748b' : 'rgba(255,255,255,0.6)', marginBottom: 36, fontStyle: 'italic' }}>
                     {data.cms.valueLine}
                   </p>
                 )}
                 <div className="hero-cta" style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                  <a href="#contact" style={{ background: '#fff', color: primary, padding: '14px 32px', borderRadius: 50, fontWeight: 700, fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }} className="btn-primary">
-                    Get Started <ArrowRight size={18} />
+                  <a href="#contact" style={{ background: isLightHero ? primary : '#fff', color: isLightHero ? '#fff' : primary, padding: '14px 32px', borderRadius: 50, fontWeight: 700, fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }} className="btn-primary">
+                    {data?.branding?.ctaText || 'Get Started'} <ArrowRight size={18} />
                   </a>
                   {whatsappLink && (
                     <a href={whatsappLink} target="_blank" rel="noopener noreferrer" style={{ background: '#25D366', color: '#fff', padding: '14px 32px', borderRadius: 50, fontWeight: 700, fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }} className="btn-primary">
@@ -353,29 +400,29 @@ export default function SitePage() {
 
               {/* Hero card visual */}
               <div className="hero-cta" style={{ display: 'flex', justifyContent: 'center' }}>
-                <div style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 24, padding: 32, width: '100%', maxWidth: 360 }}>
+                <div style={{ background: isLightHero ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: isLightHero ? '1px solid rgba(15,23,42,0.08)' : '1px solid rgba(255,255,255,0.2)', borderRadius: 24, padding: 32, width: '100%', maxWidth: 360 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
                     {data?.branding?.logoUrl ? (
-                      <img src={data.branding.logoUrl} alt="" style={{ width: 48, height: 48, borderRadius: 12, objectFit: 'cover' }} />
+                      <img src={data.branding.logoUrl} alt="" style={{ width: data.branding.logoSize === 'large' ? 64 : data.branding.logoSize === 'small' ? 32 : 48, height: data.branding.logoSize === 'large' ? 64 : data.branding.logoSize === 'small' ? 32 : 48, borderRadius: 12, objectFit: 'contain' }} />
                     ) : (
-                      <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 800, color: '#fff' }}>
+                      <div style={{ width: 48, height: 48, borderRadius: 12, background: isLightHero ? 'rgba(15,23,42,0.08)' : 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 800, color: isLightHero ? primary : '#fff' }}>
                         {(data?.branding?.companyName || 'B')[0]}
                       </div>
                     )}
                     <div>
-                      <p style={{ color: '#fff', fontWeight: 700, fontSize: 16 }}>{data?.branding?.companyName || 'Your Company'}</p>
-                      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>Verified Business</p>
+                      <p style={{ color: isLightHero ? '#0f172a' : '#fff', fontWeight: 700, fontSize: 16 }}>{data?.branding?.companyName || 'Your Company'}</p>
+                      <p style={{ color: isLightHero ? '#64748b' : 'rgba(255,255,255,0.6)', fontSize: 12 }}>Verified Business</p>
                     </div>
                   </div>
                   {tpl.stats.slice(0, 3).map((s, i) => (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.1)' : 'none' }}>
-                      <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{s.label}</span>
-                      <span style={{ color: '#fff', fontWeight: 700, fontSize: 15 }}>{s.value}</span>
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: i < 2 ? (isLightHero ? '1px solid rgba(15,23,42,0.08)' : '1px solid rgba(255,255,255,0.1)') : 'none' }}>
+                      <span style={{ color: isLightHero ? '#64748b' : 'rgba(255,255,255,0.6)', fontSize: 13 }}>{s.label}</span>
+                      <span style={{ color: isLightHero ? '#0f172a' : '#fff', fontWeight: 700, fontSize: 15 }}>{s.value}</span>
                     </div>
                   ))}
                   <div style={{ marginTop: 20, display: 'flex', gap: 4 }}>
                     {[...Array(5)].map((_, i) => <Star key={i} size={16} style={{ fill: '#fbbf24', color: '#fbbf24' }} />)}
-                    <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginLeft: 6 }}>Excellent service</span>
+                    <span style={{ color: isLightHero ? '#64748b' : 'rgba(255,255,255,0.7)', fontSize: 12, marginLeft: 6 }}>Excellent service</span>
                   </div>
                 </div>
               </div>
@@ -648,7 +695,7 @@ export default function SitePage() {
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 40, marginBottom: 48 }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-                  {data?.branding?.logoUrl && <img src={data.branding.logoUrl} alt="" style={{ height: 32, width: 'auto' }} />}
+                  {data?.branding?.logoUrl && <img src={data.branding.logoUrl} alt="" style={{ height: data.branding.logoSize === 'large' ? 40 : data.branding.logoSize === 'small' ? 24 : 32, width: 'auto', objectFit: 'contain' }} />}
                   <span style={{ fontSize: 20, fontWeight: 800, color: '#fff' }}>{data?.branding?.companyName || 'Your Company'}</span>
                 </div>
                 <p style={{ color: '#94a3b8', fontSize: 14, lineHeight: 1.7, maxWidth: 300 }}>

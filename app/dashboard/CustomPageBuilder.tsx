@@ -39,7 +39,7 @@ const SECTION_LIBRARY: { type: SectionType; label: string; icon: string; desc: s
   { type: 'cta',          label: 'CTA Banner',       icon: '📣', desc: 'Full-width call-to-action' },
   { type: 'contact',      label: 'Contact Form',     icon: '📬', desc: 'Contact form section' },
   { type: 'video',        label: 'Video Section',    icon: '🎬', desc: 'YouTube or video embed' },
-  { type: 'gallery',      label: 'Photo Gallery',    icon: '🖼️', desc: '6-image masonry grid' },
+  { type: 'gallery',      label: 'Photo Gallery',    icon: '🖼️', desc: 'Up to 12 images, grid or masonry' },
   { type: 'footer',       label: 'Footer',           icon: '🦶', desc: 'Links, contact, copyright' },
 ];
 
@@ -97,7 +97,8 @@ const DEFAULTS: Record<SectionType, Record<string, string>> = {
   },
   gallery: {
     heading: 'Our Work', subheading: "A showcase of what we've built for our clients.",
-    img_1: '', img_2: '', img_3: '', img_4: '', img_5: '', img_6: '',
+    gallery_layout: 'grid',
+    img_1: '', img_2: '', img_3: '', img_4: '', img_5: '', img_6: '', img_7: '', img_8: '', img_9: '', img_10: '', img_11: '', img_12: '',
   },
   footer: {
     company: 'Your Business', tagline: 'Helping businesses grow online with professional digital solutions.',
@@ -124,8 +125,9 @@ const FIELD_LABELS: Record<string, string> = {
   p3_name: 'Plan 3 name', p3_price: 'Plan 3 price', p3_features: 'Plan 3 features (one per line)',
   youtube_url: 'YouTube URL', company: 'Company name', tagline: 'Tagline / description',
   email: 'Email address', phone: 'Phone number', link1: 'Link 1', link2: 'Link 2', link3: 'Link 3', link4: 'Link 4',
-  image_url: 'Section photo', img_1: 'Photo 1', img_2: 'Photo 2', img_3: 'Photo 3',
-  img_4: 'Photo 4', img_5: 'Photo 5', img_6: 'Photo 6',
+  image_url: 'Section photo', gallery_layout: 'Layout',
+  img_1: 'Photo 1', img_2: 'Photo 2', img_3: 'Photo 3', img_4: 'Photo 4', img_5: 'Photo 5', img_6: 'Photo 6',
+  img_7: 'Photo 7', img_8: 'Photo 8', img_9: 'Photo 9', img_10: 'Photo 10', img_11: 'Photo 11', img_12: 'Photo 12',
 };
 
 // ─── HTML generator ─────────────────────────────────────────────────────────────
@@ -168,8 +170,16 @@ function generateSectionHtml(section: BuilderSection, pc: string): string {
       return `<section style="padding:80px 24px;background:#fff;text-align:center;"><h2 style="font-size:clamp(28px,4vw,42px);font-weight:900;color:#0f172a;margin:0 0 12px;">${f.heading}</h2><p style="font-size:17px;color:#64748b;margin:0 auto 48px;max-width:520px;">${f.subheading}</p><div style="max-width:860px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.15);background:#000;aspect-ratio:16/9;">${ytId?`<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:block;"></iframe>`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1e293b;"><p style="color:#64748b;font-size:15px;">▶ Paste a YouTube URL above to embed your video</p></div>`}</div></section>`;
     }
 
-    case 'gallery':
-      return `<section style="padding:80px 24px;background:#f8fafc;"><div style="max-width:1100px;margin:0 auto;text-align:center;"><h2 style="font-size:clamp(28px,4vw,42px);font-weight:900;color:#0f172a;margin:0 0 12px;">${f.heading}</h2><p style="font-size:17px;color:#64748b;margin:0 auto 48px;max-width:480px;">${f.subheading}</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">${Array(6).fill(0).map((_,i)=>{const imgUrl=f[`img_${i+1}`];return `<div style="aspect-ratio:4/3;border-radius:14px;overflow:hidden;">${imgUrl?`<img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Gallery ${i+1}" />`:`<div style="width:100%;height:100%;background:${i%2===0?pc:'#e2e8f0'};display:flex;align-items:center;justify-content:center;"><span style="font-size:28px;">📸</span></div>`}</div>`;}).join('')}</div></div></section>`;
+    case 'gallery': {
+      const cols = f.gallery_layout === 'masonry' ? 3 : 4;
+      const images = Array.from({ length: 12 }, (_, i) => {
+        const imgUrl = f[`img_${i + 1}`];
+        return imgUrl
+          ? `<img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Gallery ${i + 1}" />`
+          : `<div style="width:100%;height:100%;min-height:120px;background:${i % 2 === 0 ? pc : '#e2e8f0'};display:flex;align-items:center;justify-content:center;"><span style="font-size:28px;">📸</span></div>`;
+      });
+      return `<section style="padding:80px 24px;background:#f8fafc;"><div style="max-width:1100px;margin:0 auto;text-align:center;"><h2 style="font-size:clamp(28px,4vw,42px);font-weight:900;color:#0f172a;margin:0 0 12px;">${f.heading}</h2><p style="font-size:17px;color:#64748b;margin:0 auto 48px;max-width:480px;">${f.subheading}</p><div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:14px;">${images.map((html, i) => `<div style="aspect-ratio:4/3;border-radius:14px;overflow:hidden;">${html}</div>`).join('')}</div></div></section>`;
+    }
 
     case 'footer':
       return `<footer style="padding:60px 24px 28px;background:#0f172a;color:#fff;"><div style="max-width:1100px;margin:0 auto;"><div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:48px;"><div><h3 style="font-size:22px;font-weight:900;color:#fff;margin:0 0 14px;">${f.company}</h3><p style="color:#94a3b8;line-height:1.75;margin:0 0 20px;font-size:15px;">${f.tagline}</p><p style="color:#64748b;font-size:13px;line-height:1.8;margin:0;">📧 ${f.email}<br/>📱 ${f.phone}</p></div><div><h4 style="font-size:14px;font-weight:800;color:#fff;margin:0 0 18px;text-transform:uppercase;letter-spacing:1px;">Company</h4><ul style="list-style:none;padding:0;margin:0;">${[f.link1,f.link2,f.link3,f.link4].map(l=>`<li style="margin-bottom:10px;"><a href="#" style="color:#94a3b8;text-decoration:none;font-size:14px;hover:color:#fff;">${l}</a></li>`).join('')}</ul></div><div><h4 style="font-size:14px;font-weight:800;color:#fff;margin:0 0 18px;text-transform:uppercase;letter-spacing:1px;">Connect</h4><ul style="list-style:none;padding:0;margin:0;"><li style="margin-bottom:10px;"><a href="#" style="color:#94a3b8;text-decoration:none;font-size:14px;">Facebook</a></li><li style="margin-bottom:10px;"><a href="#" style="color:#94a3b8;text-decoration:none;font-size:14px;">Instagram</a></li><li style="margin-bottom:10px;"><a href="#" style="color:#94a3b8;text-decoration:none;font-size:14px;">WhatsApp</a></li></ul></div></div><div style="border-top:1px solid #1e293b;padding-top:24px;text-align:center;"><p style="color:#475569;font-size:13px;margin:0;">© ${new Date().getFullYear()} ${f.company}. All rights reserved.</p></div></div></footer>`;
@@ -473,12 +483,18 @@ export default function CustomPageBuilder({ primaryColor = '#163A63', orgId, sit
               {Object.entries(selected.fields).map(([key, val]) => {
                 const isImage = key === 'image_url' || key.startsWith('img_');
                 const isLong = !isImage && (key.includes('desc') || key.includes('text') || key.includes('body') || key.includes('subheading') || key.includes('features') || key.includes('tagline'));
+                const isGalleryLayout = key === 'gallery_layout';
                 return (
                   <div key={key}>
                     <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                       {FIELD_LABELS[key] || key.replace(/_/g, ' ')}
                     </label>
-                    {isImage ? (
+                    {isGalleryLayout ? (
+                      <select value={val || 'grid'} onChange={e => updateField(key, e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        <option value="grid">Grid (4 columns)</option>
+                        <option value="masonry">Masonry</option>
+                      </select>
+                    ) : isImage ? (
                       <div className="space-y-2">
                         {val && (
                           <div className="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-50" style={{ aspectRatio: '4/3' }}>

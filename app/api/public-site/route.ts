@@ -31,6 +31,8 @@ export async function GET(req: NextRequest) {
       businessType: branding.business_type || 'product',
       facebookPixelId: branding.facebook_pixel_id || '',
       gaId: branding.ga_id || '',
+      logoSize: (branding as Record<string, string>).logo_size || 'medium',
+      ctaText: (branding as Record<string, string>).cta_text || 'Get Started',
     } : null,
     cms: cms ? {
       heroTitle: cms.hero_title || `Grow ${companyName} online`,
@@ -43,6 +45,12 @@ export async function GET(req: NextRequest) {
       aboutBody2: cms.about_body2 || '',
       stockQuoteTitle: cms.stock_quote_title || 'Get in touch',
       stockQuoteSubtitle: cms.stock_quote_subtitle || "Leave your details and we'll reach out.",
+      template: (cms as { template?: string }).template || 'modern',
+      heroImageUrl: (cms as { hero_image_url?: string }).hero_image_url || null,
+      heroImageFit: (cms as { hero_image_fit?: string }).hero_image_fit || 'cover',
+      heroImageOpacity: typeof (cms as { hero_image_opacity?: number }).hero_image_opacity === 'number'
+        ? Math.min(90, Math.max(5, (cms as { hero_image_opacity?: number }).hero_image_opacity!))
+        : 40,
     } : null,
     customHtml: (cms as Record<string, unknown>)?.custom_html as string | null || null,
   });
