@@ -92,7 +92,7 @@ export default function SignInPage() {
     try {
       if (mode === 'forgot') {
         const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-          redirectTo: `${(process.env.NEXT_PUBLIC_APP_URL || window.location.origin).replace(/\/$/, '')}/auth/signin`,
+          redirectTo: `${window.location.origin}/auth/signin`,
         });
         if (resetError) throw resetError;
         setMessage('Check your email for the reset link.');

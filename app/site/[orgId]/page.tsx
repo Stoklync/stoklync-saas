@@ -326,7 +326,7 @@ export default function SitePage() {
                     <span style={{ fontSize: 13, color: '#fff', fontWeight: 500 }}>
                       {data.branding.businessType === 'service' ? '✦ Professional Services' : data.branding.businessType === 'consulting' ? '✦ Strategic Consulting' : '✦ Wholesale & Supply'}
                     </span>
-        </div>
+                  </div>
                 )}
                 <h1 className="hero-title" style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: 20, letterSpacing: '-1px' }}>
                   {data?.cms?.heroTitle || 'Build Your Business Online'}
@@ -348,7 +348,7 @@ export default function SitePage() {
                       <MessageCircle size={18} /> WhatsApp Us
                     </a>
                   )}
-        </div>
+                </div>
               </div>
 
               {/* Hero card visual */}
@@ -501,9 +501,9 @@ export default function SitePage() {
                   </div>
                 </div>
               ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
         {/* Contact */}
         <section id="contact" style={{ padding: '80px 24px', background: '#fff' }}>
@@ -681,9 +681,9 @@ export default function SitePage() {
               <span style={{ color: '#475569', fontSize: 13 }}>© {new Date().getFullYear()} {data?.branding?.companyName || 'Your Company'}. All rights reserved.</span>
               <span style={{ color: '#334155', fontSize: 12 }}>Powered by <Link href="https://stoklync.com" style={{ color: '#64748b' }}>Stoklync</Link></span>
             </div>
-        </div>
-      </footer>
-    </div>
+          </div>
+        </footer>
+      </div>
     </>
   );
 }

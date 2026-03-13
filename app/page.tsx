@@ -11,7 +11,7 @@ const features = [
   {
     icon: Globe,
     title: 'Your Own Website',
-    desc: 'Build a professional website in minutes - add sections, upload photos, and go live under your own brand.',
+    desc: 'Build a professional website in minutes — add sections, upload photos, and go live under your own brand.',
   },
   {
     icon: Users,
@@ -109,7 +109,7 @@ export default function Home() {
           </h1>
 
           <p className="text-lg md:text-xl text-slate-400 mb-4 max-w-2xl mx-auto leading-relaxed">
-            Run your business online. Website, CRM, marketing, and support - one place, built for how you work.
+            Run your business online. Website, CRM, marketing, and support — one place, built for how you work.
           </p>
           <p className="text-sm text-slate-500 mb-10 max-w-xl mx-auto">
             We provide the tools and support to help your business thrive.
@@ -149,7 +149,7 @@ export default function Home() {
               One platform. Your whole business.
             </h2>
             <p className="text-slate-400 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-              Website, CRM, email marketing, and customer support - everything connected, everything in one dashboard.
+              Website, CRM, email marketing, and customer support — everything connected, everything in one dashboard.
             </p>
           </div>
 
