@@ -48,10 +48,11 @@ export default function SignInPage() {
     setGoogleLoading(true);
     setError('');
     try {
+      const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '')).replace(/\/$/, '');
       const { error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: `${baseUrl || window.location.origin}/auth/callback`,
           queryParams: { access_type: 'offline', prompt: 'consent' },
         },
       });
@@ -71,7 +72,7 @@ export default function SignInPage() {
     try {
       const { error: magicError } = await supabase.auth.signInWithOtp({
         email: email.trim(),
-        options: { emailRedirectTo: `${window.location.origin}/dashboard` },
+        options: { emailRedirectTo: `${(process.env.NEXT_PUBLIC_APP_URL || window.location.origin).replace(/\/$/, '')}/auth/callback` },
       });
       if (magicError) throw magicError;
       setMessage('Check your email. We sent a magic sign-in link!');
@@ -91,7 +92,7 @@ export default function SignInPage() {
     try {
       if (mode === 'forgot') {
         const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-          redirectTo: `${window.location.origin}/auth/signin`,
+          redirectTo: `${(process.env.NEXT_PUBLIC_APP_URL || window.location.origin).replace(/\/$/, '')}/auth/signin`,
         });
         if (resetError) throw resetError;
         setMessage('Check your email for the reset link.');
