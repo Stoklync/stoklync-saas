@@ -40,13 +40,6 @@ const features = [
   },
 ];
 
-const steps = [
-  { num: '01', title: 'Create your site', desc: 'Brand it, add your content, go live in minutes.' },
-  { num: '02', title: 'Get leads in CRM', desc: 'Pipeline, notes, follow-ups — all organised.' },
-  { num: '03', title: 'Send emails', desc: 'Bulk outreach and campaigns to your leads.' },
-  { num: '04', title: 'Handle support', desc: 'Tickets, replies, resolved. Keep customers happy.' },
-];
-
 const planFeatures = [
   'Branded website with custom sections',
   'Photo gallery & content blocks',
@@ -73,8 +66,6 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-4">
             <Link href="#features" className="hidden sm:block text-sm text-slate-400 hover:text-slate-200 transition-colors">Features</Link>
-            <Link href="#how-it-works" className="hidden sm:block text-sm text-slate-400 hover:text-slate-200 transition-colors">How it works</Link>
-            <Link href="#pricing" className="hidden sm:block text-sm text-slate-400 hover:text-slate-200 transition-colors">Pricing</Link>
             <Link
               href="/auth/signin"
               className="px-4 py-2 rounded-lg bg-emerald-500 text-slate-950 text-sm font-semibold hover:bg-emerald-400 transition-colors"
@@ -120,13 +111,13 @@ export default function Home() {
               href="/auth/signin"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-all hover:scale-[1.02] text-sm"
             >
-              Start Free Trial <ArrowRight size={16} />
+              Start for free <ArrowRight size={16} />
             </Link>
             <Link
               href="#features"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-slate-800 text-slate-200 font-semibold hover:bg-slate-700 transition-colors text-sm border border-slate-700"
             >
-              See How It Works <ChevronRight size={16} />
+              See features <ChevronRight size={16} />
             </Link>
           </div>
 
@@ -167,32 +158,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── How It Works ─────────────────────────────────────────────────── */}
-      <section id="how-it-works" className="py-24 px-6 border-t border-slate-800/50">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-3">Simple by Design</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-100">How it works</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {steps.map((s, i) => (
-              <div key={s.num} className="relative">
-                {i < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-8 left-[calc(100%+12px)] w-6 text-slate-700">
-                    <ArrowRight size={16} />
-                  </div>
-                )}
-                <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 h-full">
-                  <div className="text-4xl font-black text-slate-800 mb-3 font-mono">{s.num}</div>
-                  <h3 className="font-bold text-slate-100 mb-2 text-sm">{s.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">{s.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Trust / Benefits ─────────────────────────────────────────────── */}
       <section className="py-24 px-6 border-t border-slate-800/50">
         <div className="max-w-5xl mx-auto">
@@ -206,7 +171,7 @@ export default function Home() {
                   Stop juggling five different tools. STOKLYNC brings your website, leads, emails, and support into one clean platform — so you can focus on growing your business.
                 </p>
                 <Link href="/auth/signin" className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm rounded-xl transition-colors">
-                  Get Started Free <ArrowRight size={15} />
+                  Start for free <ArrowRight size={15} />
                 </Link>
               </div>
               <div className="space-y-3">
@@ -230,56 +195,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Pricing ──────────────────────────────────────────────────────── */}
+      {/* ── Start for free ───────────────────────────────────────────────── */}
       <section id="pricing" className="py-24 px-6 border-t border-slate-800/50">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-3">Pricing</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-100">Simple, transparent pricing</h2>
-            <p className="text-slate-400 mt-4 text-sm">Everything included. No hidden fees. Cancel anytime.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            <div className="p-8 rounded-2xl bg-slate-900/60 border border-slate-800">
-              <h3 className="text-lg font-bold text-slate-100 mb-1">Starter</h3>
-              <p className="text-xs text-slate-500 mb-5">Perfect for getting online</p>
-              <div className="flex items-end gap-1 mb-6">
-                <span className="text-4xl font-black text-white">Free</span>
-              </div>
-              <ul className="space-y-2.5 mb-8">
-                {planFeatures.slice(0, 4).map(f => (
-                  <li key={f} className="flex items-center gap-2 text-sm text-slate-300">
-                    <CheckCircle2 size={13} className="text-emerald-500 shrink-0" /> {f}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/auth/signin" className="block w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold text-center transition-colors border border-slate-700">
-                Get started free
-              </Link>
-            </div>
-
-            <div className="p-8 rounded-2xl bg-gradient-to-b from-emerald-900/40 to-slate-900/80 border border-emerald-500/30 relative">
-              <div className="absolute top-4 right-4">
-                <span className="px-2.5 py-1 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase rounded-full">Popular</span>
-              </div>
-              <h3 className="text-lg font-bold text-slate-100 mb-1">Pro</h3>
-              <p className="text-xs text-slate-400 mb-5">Full platform access</p>
-              <div className="flex items-end gap-1 mb-6">
-                <span className="text-4xl font-black text-white">$29</span>
-                <span className="text-slate-400 text-sm mb-1">/mo</span>
-              </div>
-              <ul className="space-y-2.5 mb-8">
-                {planFeatures.map(f => (
-                  <li key={f} className="flex items-center gap-2 text-sm text-slate-200">
-                    <CheckCircle2 size={13} className="text-emerald-400 shrink-0" /> {f}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/auth/signin" className="block w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold text-center transition-colors">
-                Start free trial
-              </Link>
-            </div>
-          </div>
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-3">Get Started</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-100 mb-4">Start for free</h2>
+          <p className="text-slate-400 text-sm mb-8">Everything included. No credit card required. Set up in minutes.</p>
+          <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-10 text-sm text-slate-400">
+            {planFeatures.slice(0, 6).map(f => (
+              <li key={f} className="flex items-center gap-2">
+                <CheckCircle2 size={14} className="text-emerald-500 shrink-0" /> {f}
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/auth/signin"
+            className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-all hover:scale-[1.02] text-sm"
+          >
+            Start for free <ArrowRight size={16} />
+          </Link>
         </div>
       </section>
 
@@ -318,9 +252,9 @@ export default function Home() {
             href="/auth/signin"
             className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-all hover:scale-[1.02] text-sm"
           >
-            Start Free Trial <ArrowRight size={16} />
+            Start for free <ArrowRight size={16} />
           </Link>
-          <p className="text-xs text-slate-600 mt-5">Free plan available — no credit card required</p>
+          <p className="text-xs text-slate-600 mt-5">No credit card required</p>
         </div>
       </section>
 
@@ -343,8 +277,7 @@ export default function Home() {
               <div className="space-y-2">
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Platform</p>
                 <Link href="#features" className="block hover:text-slate-300 transition-colors">Features</Link>
-                <Link href="#how-it-works" className="block hover:text-slate-300 transition-colors">How it works</Link>
-                <Link href="#pricing" className="block hover:text-slate-300 transition-colors">Pricing</Link>
+                <Link href="#pricing" className="block hover:text-slate-300 transition-colors">Get Started</Link>
               </div>
               <div className="space-y-2">
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Company</p>
